@@ -743,6 +743,15 @@ State state = IDLE;
 
   <footer class="site-footer"><div class="container footer-main"><div><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span><i>+</i><b>−</b></span><span>ардуино<span class="brand-accent">с нуля</span></span></a><p>Понятный курс по электронике<br>и программированию для каждого.</p></div><div><strong>Обучение</strong><a href="#course">Все уроки</a><a href="#simulator">Симулятор</a><a href="#projects">Проекты</a></div><div><strong>Помощь</strong><a href="#faq">Частые вопросы</a><a href="https://docs.arduino.cc/" target="_blank" rel="noopener noreferrer">Документация Arduino ↗</a><a href="https://www.arduino.cc/en/software/" target="_blank" rel="noopener noreferrer">Скачать Arduino IDE ↗</a></div><div class="footer-note"><strong>Учитесь безопасно</strong><p>Работайте с низким напряжением. Не подключайте учебные схемы к бытовой сети 220 В.</p></div></div><div class="container footer-bottom"><span>Сделано с интересом к изобретательству</span><span>Учитесь. Собирайте. Экспериментируйте.</span></div></footer>
 
+  <dialog class="wiring-modal" id="wiring-modal" aria-labelledby="wiring-title">
+    <button class="wiring-close icon-button" id="wiring-close" type="button" aria-label="Закрыть схему">×</button>
+    <span class="lesson-tag">Наглядная схема</span>
+    <h3 id="wiring-title">Схема подключения</h3>
+    <p id="wiring-description"></p>
+    <div class="wiring-diagram" id="wiring-diagram"></div>
+    <div class="wiring-legend"><span><i class="wire-red"></i>Питание +</span><span><i class="wire-dark"></i>GND</span><span><i class="wire-yellow"></i>Сигнал</span><span><i class="wire-blue"></i>Данные</span></div>
+    <p class="wiring-note" id="wiring-note"></p>
+  </dialog>
   <dialog class="project-modal" id="project-modal" aria-labelledby="modal-title"><button class="modal-close icon-button" type="button" aria-label="Закрыть инструкцию">×</button><div id="modal-content"></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="script.js"></script>

@@ -656,3 +656,119 @@ document.getElementById('component-reset').addEventListener('click', () => {
 });
 
 filterComponents();
+
+const wiringDiagrams = [
+  {
+    key: 'uno', device: 'Компьютер / USB', description: 'USB соединяет Uno с компьютером: кабель одновременно питает плату и переносит скетч.', pins: [['USB', 'USB компьютера', 'blue']], note: 'Для первых схем используйте USB и небольшие модули 5 В. Не подавайте внешнее напряжение на цифровые входы.'
+  },
+  {
+    key: 'breadboard', device: 'Макетная плата', description: 'Выведите питание Uno на боковые дорожки макетки, чтобы удобно подключать детали.', pins: [['5V', 'Красная дорожка +', 'red'], ['GND', 'Синяя дорожка −', 'dark']], note: 'На длинной макетке дорожки могут быть разорваны посередине. При необходимости соедините половины перемычками.'
+  },
+  {
+    key: 'usb', device: 'Компьютер', description: 'Подключите разъём платы к USB-порту компьютера кабелем с линиями данных.', pins: [['USB-B / USB-C', 'USB-A / USB-C', 'blue']], note: 'Разъём зависит от модели платы. Если Uno получает питание, но не видна в Arduino IDE, проверьте другой кабель передачи данных.'
+  },
+  {
+    key: 'jumpers', device: 'Модуль / датчик', description: 'Перемычки соединяют одинаковые по назначению точки: сигнал к входу, питание к питанию, минус к минусу.', pins: [['D2', 'Сигнал / IN', 'yellow'], ['5V', 'VCC', 'red'], ['GND', 'GND', 'dark']], note: 'Цвет провода выбираете вы. Схема работает от электрического соединения, а не от цвета изоляции.'
+  },
+  {
+    key: 'resistor', device: 'LED + резистор', description: 'Резистор стоит последовательно со светодиодом и ограничивает ток всей цепи.', pins: [['D13', 'Резистор 220 Ω → анод', 'red'], ['GND', 'Катод светодиода', 'dark']], note: 'Резистор можно поставить до или после светодиода. Полярности у обычного резистора нет, а у светодиода есть.'
+  },
+  {
+    key: 'led', device: 'Светодиод', description: 'Выход D13 питает светодиод через резистор, а GND замыкает цепь.', pins: [['D13', '220 Ω → анод (+)', 'red'], ['GND', 'Катод (−)', 'dark']], note: 'Анод обычно имеет длинную ножку. Для плавной яркости используйте D9 или другой контакт со значком ~.'
+  },
+  {
+    key: 'button', device: 'Тактовая кнопка', description: 'Кнопка соединяет вход D2 с GND только во время нажатия. Внешний резистор не нужен.', pins: [['D2', 'Контакт 1', 'yellow'], ['GND', 'Контакт 2', 'dark']], note: 'В коде выберите pinMode(2, INPUT_PULLUP). Используйте ножки по диагонали или по разные стороны корпуса.'
+  },
+  {
+    key: 'potentiometer', device: 'Потенциометр', description: 'Крайние выводы получают 5 В и GND, а средний вывод передаёт изменяющееся напряжение на A0.', pins: [['5V', 'Крайний вывод 1', 'red'], ['A0', 'Средний вывод', 'yellow'], ['GND', 'Крайний вывод 2', 'dark']], note: 'Если вращение меняет значения в обратную сторону, поменяйте местами крайние выводы питания.'
+  },
+  {
+    key: 'photoresistor', device: 'Делитель света', description: 'Фоторезистор и постоянный резистор образуют делитель. Общая точка подключается к A0.', pins: [['5V', 'Фоторезистор → A0', 'red'], ['A0', 'Общая точка деталей', 'yellow'], ['GND', 'Резистор 10 кОм → A0', 'dark']], note: 'Физически A0 — это точка соединения второго вывода фоторезистора и первого вывода резистора 10 кОм.'
+  },
+  {
+    key: 'rgb', device: 'RGB · общий катод', description: 'Каждый цветовой канал получает отдельный резистор и отдельный ШИМ-выход.', pins: [['D9 ~', '220 Ω → R', 'red'], ['D10 ~', '220 Ω → G', 'green'], ['D11 ~', '220 Ω → B', 'blue'], ['GND', 'Общий катод', 'dark']], note: 'Схема показана для RGB с общим катодом. Для модели с общим анодом подключение и логика управления отличаются.'
+  },
+  {
+    key: 'piezo', device: 'Пьезодинамик', description: 'Пассивный пьезодинамик подключается к цифровому выходу и GND.', pins: [['D9', 'Сигнал / +', 'yellow'], ['GND', 'GND / −', 'dark']], note: 'Используйте tone(9, частота) для звука и noTone(9) для тишины. Мощный динамик требует усилитель.'
+  },
+  {
+    key: 'dht22', device: 'DHT22', description: 'DHT22 получает питание и передаёт цифровые измерения по линии DATA.', pins: [['5V', 'VCC', 'red'], ['D2', 'DATA', 'yellow'], ['GND', 'GND', 'dark']], note: 'Для датчика без модуля добавьте резистор 10 кОм между DATA и VCC. Порядок ножек проверьте по документации.'
+  },
+  {
+    key: 'oled', device: 'OLED SSD1306', description: 'OLED подключается по I²C: две линии данных и два провода питания.', pins: [['5V*', 'VCC*', 'red'], ['GND', 'GND', 'dark'], ['A4', 'SDA', 'blue'], ['A5', 'SCL', 'yellow']], note: 'На Uno SDA = A4, SCL = A5. Звёздочка напоминает: напряжение VCC должно соответствовать конкретному модулю.'
+  },
+  {
+    key: 'hcsr04', device: 'HC-SR04', description: 'TRIG запускает импульс, ECHO возвращает длительность эха.', pins: [['5V', 'VCC', 'red'], ['GND', 'GND', 'dark'], ['D7', 'TRIG', 'yellow'], ['D8', 'ECHO', 'blue']], note: 'Схема предназначена для 5-вольтовой Uno. Для платы 3,3 В понизьте уровень ECHO делителем или преобразователем.'
+  },
+  {
+    key: 'pir', device: 'PIR-датчик', description: 'Сигнальный выход PIR сообщает цифровому входу об обнаруженном движении.', pins: [['5V', 'VCC', 'red'], ['D2', 'OUT', 'yellow'], ['GND', 'GND', 'dark']], note: 'После включения дайте модулю стабилизироваться 30–60 секунд. Расположение выводов отличается у разных производителей.'
+  },
+  {
+    key: 'soil', device: 'Датчик почвы', description: 'Аналоговый выход датчика передаёт на A0 значение для последующей калибровки.', pins: [['5V*', 'VCC*', 'red'], ['GND', 'GND', 'dark'], ['A0', 'AO / сигнал', 'yellow']], note: 'Проверьте допустимое питание модуля. Не погружайте электронную плату датчика в воду и не используйте чужой порог без калибровки.'
+  },
+  {
+    key: 'motor', device: 'Драйвер + мотор', description: 'Arduino управляет только входом драйвера. Мотор получает энергию от отдельного источника.', pins: [['D9 ~', 'IN / PWM драйвера', 'yellow'], ['GND', 'Общий GND', 'dark'], ['БП подходящего U', 'Силовой VCC драйвера', 'red']], note: 'Вывод мотора → мотору. Не подключайте мотор к D9 или 5V Uno. Источник должен выдерживать пусковой ток.'
+  },
+  {
+    key: 'diode', device: 'MOSFET + мотор', description: 'Защитный диод подключается параллельно мотору в обратном направлении.', pins: [['D9', 'MOSFET / вход', 'yellow'], ['GND', 'Общий GND', 'dark'], ['Плюс БП', 'Катод диода + мотор', 'red']], note: 'Анод диода соединяется со стороной транзистора и вторым выводом мотора. Многие готовые драйверы уже имеют защиту.'
+  },
+  {
+    key: 'power', device: 'Драйвер / нагрузка', description: 'Отдельный блок питания питает силовую часть, а общий GND связывает её с управлением.', pins: [['GND', 'Общий GND', 'dark'], ['Не соединять 5V', 'V+ отдельного БП', 'red']], note: 'Не объединяйте плюсы разных источников. Напряжение и ток источника выбираются под нагрузку и драйвер.'
+  },
+  {
+    key: 'relay', device: 'Релейный модуль', description: 'Цифровой выход управляет входом релейного модуля, а модуль получает отдельные VCC и GND.', pins: [['5V*', 'VCC*', 'red'], ['D7', 'IN', 'yellow'], ['GND', 'GND', 'dark']], note: 'Показана только низковольтная управляющая часть. Не подключайте 220 В в учебной схеме на макетной плате.'
+  }
+];
+
+const wiringModal = document.getElementById('wiring-modal');
+const wiringColors = { red: '#df6855', dark: '#334b54', yellow: '#dfab48', blue: '#4e94bd', green: '#4eaa7e' };
+
+function renderWiringDiagram(diagram) {
+  const pinCount = diagram.pins.length;
+  const boardStart = pinCount > 3 ? 112 : 145;
+  const boardGap = pinCount > 3 ? 45 : 72;
+  const deviceStart = pinCount > 3 ? 130 : 165;
+  const deviceGap = pinCount > 3 ? 43 : 70;
+  const wires = diagram.pins.map((pin, index) => {
+    const y1 = boardStart + index * boardGap;
+    const y2 = deviceStart + index * deviceGap;
+    const color = wiringColors[pin[2]];
+    if (/БП|Не соединять/.test(pin[0])) {
+      return `<rect x="310" y="315" width="120" height="66" rx="9" fill="#fff3d9" stroke="#dfa652"/><text x="370" y="335" text-anchor="middle" fill="#8a6330" font-size="9" font-weight="700" font-family="Arial">ОТДЕЛЬНЫЙ БП</text><text x="370" y="352" text-anchor="middle" fill="#8a6330" font-size="8" font-family="Arial">${pin[0]}</text><path d="M430 347 C452 347, 452 ${y2}, 475 ${y2}" fill="none" stroke="${color}" stroke-width="5"/><circle cx="475" cy="${y2}" r="7" fill="${color}"/><text x="494" y="${y2 + 4}" fill="#45615e" font-size="12" font-family="Arial">${pin[1]}</text>`;
+    }
+    return `<path d="M275 ${y1} C365 ${y1}, 385 ${y2}, 475 ${y2}" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round"/><circle cx="275" cy="${y1}" r="7" fill="${color}"/><circle cx="475" cy="${y2}" r="7" fill="${color}"/><text x="258" y="${y1 + 4}" text-anchor="end" fill="#d9efea" font-size="13" font-family="monospace">${pin[0]}</text><text x="494" y="${y2 + 4}" fill="#45615e" font-size="12" font-family="Arial">${pin[1]}</text>`;
+  }).join('');
+  return `<svg viewBox="0 0 760 400" role="img" aria-label="Схема: ${diagram.description}"><rect x="30" y="48" width="245" height="296" rx="17" fill="#147c80"/><rect x="51" y="74" width="74" height="43" rx="5" fill="#c6d4d3"/><rect x="80" y="225" width="119" height="49" rx="5" fill="#19373d"/><circle cx="54" cy="319" r="7" fill="#d1e2db"/><text x="152" y="200" text-anchor="middle" fill="#c7e9df" font-size="18" font-weight="700" font-family="Arial">ARDUINO UNO</text><text x="152" y="222" text-anchor="middle" fill="#8ec4b8" font-size="10" font-family="monospace">УПРАВЛЕНИЕ</text><rect x="475" y="86" width="240" height="230" rx="15" fill="#f1f5ef" stroke="#b8ccc3" stroke-width="2"/><text x="595" y="112" text-anchor="middle" fill="#176f6b" font-size="15" font-weight="700" font-family="Arial">${diagram.device}</text><text x="595" y="341" text-anchor="middle" fill="#8b9d97" font-size="10" font-family="Arial">КОМПОНЕНТ / МОДУЛЬ</text>${wires}</svg>`;
+}
+
+componentCards.forEach((card, index) => {
+  const diagram = wiringDiagrams[index];
+  if (!diagram) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'wiring-open';
+  button.dataset.wiring = diagram.key;
+  button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 12h10M12 7v10"/></svg> Схема подключения';
+  card.appendChild(button);
+  button.addEventListener('click', () => {
+    document.getElementById('wiring-title').textContent = card.querySelector('h3').textContent;
+    document.getElementById('wiring-description').textContent = diagram.description;
+    document.getElementById('wiring-note').textContent = diagram.note;
+    document.getElementById('wiring-diagram').innerHTML = renderWiringDiagram(diagram);
+    wiringModal.showModal();
+    document.body.classList.add('modal-open');
+  });
+});
+
+function closeWiringModal() {
+  wiringModal.close();
+  document.body.classList.remove('modal-open');
+}
+
+document.getElementById('wiring-close').addEventListener('click', closeWiringModal);
+wiringModal.addEventListener('click', event => {
+  if (event.target !== wiringModal) return;
+  const rect = wiringModal.getBoundingClientRect();
+  if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeWiringModal();
+});
+wiringModal.addEventListener('close', () => document.body.classList.remove('modal-open'));

@@ -685,3 +685,27 @@ pre { margin: 0; white-space: pre; }
   .component-rule { align-items: flex-start; flex-direction: column; gap: 7px; }
   .component-rule strong { flex: none; }
 }
+
+.wiring-open { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; min-height: 37px; margin-top: 15px; border: 1px solid #c9dcd3; border-radius: 7px; background: #f2f7f4; color: var(--teal); font-size: 10px; font-weight: 800; cursor: pointer; }
+.wiring-open:hover { border-color: var(--teal); background: #e8f3ed; }
+.wiring-open svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+.wiring-modal { width: min(800px, calc(100% - 32px)); max-height: 90vh; padding: 32px; border: 0; border-radius: 16px; color: var(--ink); box-shadow: 0 25px 100px rgba(0,0,0,.3); }
+.wiring-modal::backdrop { background: rgba(10,35,40,.72); backdrop-filter: blur(4px); }
+.wiring-close { position: absolute; right: 12px; top: 10px; font-size: 26px; }
+.wiring-modal h3 { margin: 7px 35px 10px 0; font-size: 28px; }
+.wiring-modal > p { color: #607572; font-size: 12px; }
+.wiring-diagram { overflow-x: auto; margin-top: 20px; border: 1px solid #dce6e1; border-radius: 12px; background: white; }
+.wiring-diagram svg { width: 100%; min-width: 560px; height: auto; }
+.wiring-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 14px; color: #748983; font-size: 9px; }
+.wiring-legend span { display: flex; align-items: center; gap: 5px; }
+.wiring-legend i { display: inline-block; width: 20px; height: 3px; border-radius: 3px; }
+.wire-red { background: #df6855; }
+.wire-dark { background: #334b54; }
+.wire-yellow { background: #dfab48; }
+.wire-blue { background: #4e94bd; }
+.wiring-modal .wiring-note { margin: 18px 0 0; padding: 12px 15px; border-left: 3px solid #dfa352; border-radius: 0 7px 7px 0; background: #fff7e7; color: #77684e; font-size: 11px; line-height: 1.7; }
+@media (max-width: 650px) {
+  .wiring-modal { padding: 27px 17px 20px; }
+  .wiring-modal h3 { font-size: 23px; }
+  .wiring-diagram svg { min-width: 520px; }
+}
