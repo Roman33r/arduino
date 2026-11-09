@@ -600,3 +600,59 @@ reactionHit.addEventListener('click', () => {
   reactionMessage.textContent = `Ваша реакция: ${elapsed} мс`;
   reactionResult.textContent = `Лучший результат: ${reactionBest} мс`;
 });
+
+const componentSearch = document.getElementById('component-search-input');
+const componentCards = [...document.querySelectorAll('.component-card')];
+const componentFilterButtons = [...document.querySelectorAll('[data-component-filter]')];
+let currentComponentFilter = 'all';
+
+function componentWord(count) {
+  const lastTwo = count % 100;
+  const last = count % 10;
+  if (lastTwo >= 11 && lastTwo <= 14) return 'компонентов';
+  if (last === 1) return 'компонент';
+  if (last >= 2 && last <= 4) return 'компонента';
+  return 'компонентов';
+}
+
+function filterComponents() {
+  const query = componentSearch.value.trim().toLocaleLowerCase('ru');
+  let visibleCount = 0;
+  componentCards.forEach(card => {
+    const categories = card.dataset.category.split(' ');
+    const matchesCategory = currentComponentFilter === 'all' || categories.includes(currentComponentFilter);
+    const searchText = `${card.dataset.name} ${card.textContent}`.toLocaleLowerCase('ru');
+    const matchesSearch = !query || searchText.includes(query);
+    card.hidden = !(matchesCategory && matchesSearch);
+    if (!card.hidden) visibleCount += 1;
+  });
+  document.getElementById('component-count').textContent = `Показано ${visibleCount} ${componentWord(visibleCount)}`;
+  document.getElementById('component-empty').hidden = visibleCount !== 0;
+}
+
+componentSearch.addEventListener('input', filterComponents);
+componentFilterButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    currentComponentFilter = button.dataset.componentFilter;
+    componentFilterButtons.forEach(item => {
+      const active = item === button;
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-pressed', String(active));
+    });
+    filterComponents();
+  });
+});
+
+document.getElementById('component-reset').addEventListener('click', () => {
+  currentComponentFilter = 'all';
+  componentSearch.value = '';
+  componentFilterButtons.forEach(button => {
+    const active = button.dataset.componentFilter === 'all';
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+  filterComponents();
+  componentSearch.focus();
+});
+
+filterComponents();
