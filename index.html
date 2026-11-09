@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Бесплатный интерактивный курс Arduino на русском языке: от первого светодиода до собственных устройств. Понятные уроки, схемы, код, симулятор и тесты.">
+  <title>Ардуино с нуля — понятный интерактивный курс</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Ардуино с нуля — на главную">
+        <span class="brand-mark" aria-hidden="true"><span></span><i>+</i><b>−</b></span>
+        <span>ардуино<span class="brand-accent">с нуля</span></span>
+      </a>
+      <button class="menu-toggle icon-button" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <nav class="main-nav" id="main-nav" aria-label="Основная навигация">
+        <a href="#course">Уроки</a>
+        <a href="#simulator">Симулятор</a>
+        <a href="#projects">Проекты</a>
+        <a href="#quiz">Проверка знаний</a>
+      </nav>
+      <a class="button button-small header-cta" href="#lesson-1">Начать учиться <span aria-hidden="true">→</span></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Бесплатный курс для начинающих</div>
+          <h1>От первого провода<br>до <span>своего устройства</span></h1>
+          <p class="hero-lead">Разберитесь в Arduino без скучной теории и сложных терминов. Собирайте схемы, пишите код и сразу видьте результат — даже если никогда раньше не программировали.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#lesson-1">Пройти первый урок <span aria-hidden="true">→</span></a>
+            <a class="button button-ghost" href="#simulator"><span class="play-icon" aria-hidden="true">▶</span> Попробовать симулятор</a>
+          </div>
+          <ul class="hero-features" aria-label="Преимущества курса">
+            <li><span aria-hidden="true">✓</span> 8 подробных уроков</li>
+            <li><span aria-hidden="true">✓</span> Практика в браузере</li>
+            <li><span aria-hidden="true">✓</span> Без опыта и платной регистрации</li>
+          </ul>
+        </div>
+        <div class="hero-visual" aria-label="Иллюстрация платы Arduino с подключённым светодиодом">
+          <div class="floating-label label-code"><span class="window-dots">● ● ●</span><code>digitalWrite(13, HIGH);</code><span class="code-comment">// светодиод включён</span></div>
+          <div class="board-wrap">
+            <div class="board-shadow"></div>
+            <svg class="arduino-board" viewBox="0 0 600 440" role="img" aria-label="Учебная иллюстрация Arduino Uno">
+              <defs>
+                <linearGradient id="boardGradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#187d82"/><stop offset="1" stop-color="#0b5f67"/></linearGradient>
+                <filter id="ledGlow"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <rect x="55" y="45" width="490" height="345" rx="20" fill="url(#boardGradient)"/>
+              <circle cx="82" cy="70" r="8" fill="#d4e6df"/><circle cx="518" cy="360" r="8" fill="#d4e6df"/>
+              <rect x="34" y="115" width="74" height="104" rx="7" fill="#b8c4c8"/><rect x="34" y="124" width="68" height="84" rx="4" fill="#dce5e5"/><rect x="34" y="133" width="20" height="65" fill="#8b999d"/>
+              <rect x="112" y="250" width="48" height="88" rx="4" fill="#202f35"/><rect x="123" y="260" width="26" height="66" fill="#435159"/>
+              <rect x="224" y="185" width="180" height="74" rx="7" fill="#17282d"/>
+              <g fill="#8fa4a5"><rect x="235" y="177" width="8" height="8"/><rect x="254" y="177" width="8" height="8"/><rect x="273" y="177" width="8" height="8"/><rect x="292" y="177" width="8" height="8"/><rect x="311" y="177" width="8" height="8"/><rect x="330" y="177" width="8" height="8"/><rect x="349" y="177" width="8" height="8"/><rect x="368" y="177" width="8" height="8"/><rect x="387" y="177" width="8" height="8"/></g>
+              <text x="314" y="228" text-anchor="middle" fill="#71898c" font-size="15" font-family="monospace">ATMEGA328P</text>
+              <rect x="205" y="85" width="265" height="29" rx="3" fill="#182c31"/>
+              <g fill="#d6c49b"><circle cx="220" cy="99" r="5"/><circle cx="240" cy="99" r="5"/><circle cx="260" cy="99" r="5"/><circle cx="280" cy="99" r="5"/><circle cx="300" cy="99" r="5"/><circle cx="320" cy="99" r="5"/><circle cx="340" cy="99" r="5"/><circle cx="360" cy="99" r="5"/><circle cx="380" cy="99" r="5"/><circle cx="400" cy="99" r="5"/><circle cx="420" cy="99" r="5"/><circle cx="440" cy="99" r="5"/><circle cx="460" cy="99" r="5"/></g>
+              <rect x="250" y="320" width="255" height="29" rx="3" fill="#182c31"/>
+              <g fill="#d6c49b"><circle cx="265" cy="334" r="5"/><circle cx="285" cy="334" r="5"/><circle cx="305" cy="334" r="5"/><circle cx="325" cy="334" r="5"/><circle cx="345" cy="334" r="5"/><circle cx="365" cy="334" r="5"/><circle cx="385" cy="334" r="5"/><circle cx="405" cy="334" r="5"/><circle cx="425" cy="334" r="5"/><circle cx="445" cy="334" r="5"/><circle cx="465" cy="334" r="5"/><circle cx="485" cy="334" r="5"/></g>
+              <text x="420" y="299" text-anchor="middle" fill="#b8ded6" font-size="26" font-weight="700" font-family="Arial">ARDUINO</text>
+              <text x="420" y="318" text-anchor="middle" fill="#91c2b8" font-size="13" font-family="Arial">UNO</text>
+              <circle cx="466" cy="146" r="13" fill="#ffcf4a" filter="url(#ledGlow)" class="hero-led"/><text x="440" y="174" fill="#b8ded6" font-size="11" font-family="monospace">L</text>
+              <path d="M455 99 C530 85 575 105 570 185" fill="none" stroke="#f26c5b" stroke-width="7" stroke-linecap="round"/>
+              <path d="M485 334 C570 345 585 295 570 220" fill="none" stroke="#293740" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="570" cy="202" r="21" fill="#ffcc4b" filter="url(#ledGlow)"/><path d="M557 213l-5 25M577 213l7 25" stroke="#c5d3cf" stroke-width="4"/>
+            </svg>
+          </div>
+          <div class="floating-label label-success"><span class="success-check">✓</span><div><strong>Схема работает!</strong><small>Первый шаг уже сделан</small></div></div>
+          <span class="deco deco-one">+</span><span class="deco deco-two">+</span>
+        </div>
+      </div>
+      <div class="container stats-strip">
+        <div><strong>8</strong><span>уроков с практикой</span></div>
+        <div><strong>20+</strong><span>примеров кода</span></div>
+        <div><strong>3</strong><span>готовых проекта</span></div>
+        <div><strong>0 ₽</strong><span>и без регистрации</span></div>
+      </div>
+    </section>
+
+    <section class="course-section" id="course">
+      <div class="container section-heading">
+        <div><div class="eyebrow">Ваша дорожная карта</div><h2>Изучаем по шагам, <span>не пропуская главное</span></h2></div>
+        <p>Каждый урок опирается на предыдущий. Читайте по порядку или откройте нужную тему — прогресс сохранится в этом браузере.</p>
+      </div>
+      <div class="container course-layout">
+        <aside class="course-sidebar" aria-label="Содержание курса">
+          <div class="progress-card">
+            <div class="progress-top"><span>Ваш прогресс</span><strong id="progress-percent">0%</strong></div>
+            <div class="progress-track" role="progressbar" aria-label="Прогресс курса" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-fill"></span></div>
+            <small id="progress-caption">0 из 8 уроков завершено</small>
+          </div>
+          <nav class="lesson-nav">
+            <a href="#lesson-1" class="active"><span class="lesson-number">01</span><span>Знакомство с Arduino<small>Что это и как работает</small></span><i class="lesson-status" aria-hidden="true"></i></a>
+            <a href="#lesson-2"><span class="lesson-number">02</span><span>Плата и компоненты<small>Разбираем по деталям</small></span><i class="lesson-status" aria-hidden="true"></i></a>
+            <a href="#lesson-3"><span class="lesson-number">03</span><span>Установка Arduino IDE<small>Готовим рабочее место</small></span><i class="lesson-status" aria-hidden="true"></i></a>
+            <a href="#lesson-4"><span class="lesson-number">04</span><span>Первая программа<small>Мигаем светодиодом</small></span><i class="lesson-status" aria-hidden="true"></i></a>
+            <a href="#lesson-5"><span class="lesson-number">05</span><span>Кнопки и условия<small>Устройство реагирует</small></span><i class="lesson-status" aria-hidden="true"></i></a>
+            <a href="#lesson-6"><span class="lesson-number">06</span><span>Аналоговый мир<small>Датчики и плавный свет</small></span><i class="lesson-status" aria-hidden="true"></i></a>
+            <a href="#lesson-7"><span class="lesson-number">07</span><span>Монитор порта<small>Разговор с платой</small></span><i class="lesson-status" aria-hidden="true"></i></a>
+            <a href="#lesson-8"><span class="lesson-number">08</span><span>Собираем проект<small>Умный ночник</small></span><i class="lesson-status" aria-hidden="true"></i></a>
+          </nav>
+          <div class="sidebar-help"><span aria-hidden="true">💡</span><p><strong>Нет платы под рукой?</strong><br>Начните с теории и симулятора, а схемы соберите позже.</p></div>
+        </aside>
+
+        <div class="lessons-content">
+          <article class="lesson-card" id="lesson-1" data-lesson="1">
+            <header class="lesson-header"><span class="lesson-tag">Урок 01 · 10 минут</span><button class="complete-button" type="button" data-complete="1"><span class="check-circle">✓</span><span>Отметить пройденным</span></button></header>
+            <h3>Что такое Arduino и зачем оно нужно?</h3>
+            <p class="lesson-intro">Arduino — это небольшая программируемая плата, с которой можно создавать электронные устройства: от мигающего светодиода до автоматической теплицы. Она считывает сигналы датчиков, выполняет вашу программу и управляет лампами, моторами и другими компонентами.</p>
+            <div class="plain-language"><strong>Простыми словами</strong><p>Arduino — как маленький мозг конструктора. Датчики — его органы чувств, программа — правила поведения, а светодиоды и моторы — руки, которыми он действует.</p></div>
+            <h4>Как работает любое устройство на Arduino</h4>
+            <div class="flow-diagram" aria-label="Схема работы: вход, обработка, выход"><div><span>1</span><strong>Вход</strong><small>Кнопка, датчик света</small></div><b>→</b><div><span>2</span><strong>Решение</strong><small>Программа на плате</small></div><b>→</b><div><span>3</span><strong>Действие</strong><small>Свет, звук, движение</small></div></div>
+            <p>Например: <strong>если</strong> стало темно, <strong>то</strong> включить ночник. Датчик освещённости сообщает плате уровень света, программа сравнивает его с заданным порогом, а выходной контакт подаёт питание на светодиод.</p>
+            <h4>Что понадобится для старта</h4>
+            <div class="shopping-grid">
+              <div><span class="part-icon">▣</span><strong>Arduino Uno</strong><p>Или совместимая плата. Лучший вариант для обучения.</p></div>
+              <div><span class="part-icon">⌁</span><strong>USB-кабель</strong><p>Для Uno обычно USB-A → USB-B. Проверьте разъём платы.</p></div>
+              <div><span class="part-icon">⠿</span><strong>Макетная плата</strong><p>Позволяет собирать схемы без пайки.</p></div>
+              <div><span class="part-icon">◉</span><strong>Детали</strong><p>Светодиоды, резисторы 220 Ом, кнопки и провода.</p></div>
+            </div>
+            <div class="note note-warning"><strong>Важно про безопасность</strong><p>Начинайте только с USB-питания 5 В. Не подключайте Arduino к розетке 220 В и не замыкайте контакты <code>5V</code> и <code>GND</code> проводом. Перед изменением схемы отключайте кабель питания.</p></div>
+            <details class="lesson-extra"><summary>Где применяют Arduino?</summary><p>В учебных роботах, домашней метеостанции, автоматическом поливе, электронных замках, интерактивных инсталляциях и прототипах устройств. Arduino отлично подходит для проверки идеи; готовый промышленный прибор может потребовать другой платы и сертификации.</p></details>
+          </article>
+
+          <article class="lesson-card" id="lesson-2" data-lesson="2">
+            <header class="lesson-header"><span class="lesson-tag">Урок 02 · 15 минут</span><button class="complete-button" type="button" data-complete="2"><span class="check-circle">✓</span><span>Отметить пройденным</span></button></header>
+            <h3>Плата и компоненты: разбираем по деталям</h3>
+            <p class="lesson-intro">Не нужно знать назначение каждого элемента. Для первых проектов достаточно понимать питание, цифровые и аналоговые контакты.</p>
+            <div class="pin-table-wrap"><table class="pin-table"><thead><tr><th>Название</th><th>Что делает</th><th>Когда использовать</th></tr></thead><tbody><tr><td><code>5V</code>, <code>GND</code></td><td>Питание и общий минус</td><td>Питание простых датчиков и цепей</td></tr><tr><td><code>0–13</code></td><td>Цифровые входы и выходы</td><td>Кнопки, светодиоды, реле</td></tr><tr><td><code>A0–A5</code></td><td>Аналоговые входы</td><td>Потенциометры, датчики света</td></tr><tr><td><code>~3, ~5, ~6, ~9–11</code></td><td>Цифровые выходы с ШИМ</td><td>Плавная яркость, скорость мотора через драйвер</td></tr><tr><td><code>0 (RX), 1 (TX)</code></td><td>Последовательный обмен</td><td>Связь; на Uno заняты USB при загрузке</td></tr><tr><td><code>RESET</code></td><td>Перезапуск программы</td><td>Обычно используют кнопку на плате</td></tr></tbody></table></div>
+            <div class="two-column-explain">
+              <div><h4>Цифровой сигнал</h4><p>Имеет два состояния: <code>HIGH</code> (высокий, около 5 В) и <code>LOW</code> (низкий, 0 В). Подходит для ответов «да/нет»: кнопка нажата или нет, светодиод включён или выключен.</p></div>
+              <div><h4>Аналоговый сигнал</h4><p>Может принимать множество значений. На Arduino Uno <code>analogRead()</code> возвращает число от 0 до 1023 — от 0 до 5 В на входе.</p></div>
+            </div>
+            <h4>Макетная плата без магии</h4>
+            <div class="breadboard-demo" aria-label="Схема внутренних соединений макетной платы">
+              <div class="power-rails"><span>+</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span>−</span><i class="dark-hole"></i><i class="dark-hole"></i><i class="dark-hole"></i><i class="dark-hole"></i><i class="dark-hole"></i><i class="dark-hole"></i><i class="dark-hole"></i><i class="dark-hole"></i><i class="dark-hole"></i></div>
+              <div class="bread-rows"><div><i></i><i></i><i></i><i></i><i></i><b></b><i></i><i></i><i></i><i></i><i></i></div><div><i></i><i></i><i></i><i></i><i></i><b></b><i></i><i></i><i></i><i></i><i></i></div><div><i></i><i></i><i></i><i></i><i></i><b></b><i></i><i></i><i></i><i></i><i></i></div><div><i></i><i></i><i></i><i></i><i></i><b></b><i></i><i></i><i></i><i></i><i></i></div><div><i></i><i></i><i></i><i></i><i></i><b></b><i></i><i></i><i></i><i></i><i></i></div></div>
+              <p><span class="line-sample horizontal"></span> Пять отверстий в ряду соединены <span class="line-sample vertical"></span> Дорожки питания идут вдоль платы <span class="line-gap"></span> Центральный канал разрывает ряды</p>
+            </div>
+            <div class="note"><strong>Зачем светодиоду резистор?</strong><p>Светодиод почти не ограничивает ток сам. Без резистора он может перегореть или повредить вывод платы. Для экспериментов с 5 В возьмите резистор <strong>220–330 Ом</strong>. Длинная ножка светодиода — анод (+), короткая — катод (−).</p></div>
+            <details class="lesson-extra"><summary>Как рассчитать резистор по закону Ома?</summary><p>Формула: <code>R = (Uпитания − Uсветодиода) / I</code>. Для красного светодиода с падением около 2 В и током 10 мА: <code>(5 − 2) / 0,01 = 300 Ом</code>. Ближайший стандартный номинал — 330 Ом. С резистором 220 Ом ток будет около 13,6 мА. Не превышайте рекомендуемый ток вывода микроконтроллера; для долговечности достаточно 5–15 мА.</p></details>
+          </article>
+
+          <article class="lesson-card" id="lesson-3" data-lesson="3">
+            <header class="lesson-header"><span class="lesson-tag">Урок 03 · 10 минут</span><button class="complete-button" type="button" data-complete="3"><span class="check-circle">✓</span><span>Отметить пройденным</span></button></header>
+            <h3>Устанавливаем Arduino IDE и подключаем плату</h3>
+            <p class="lesson-intro">Arduino IDE — программа, в которой вы пишете скетч, проверяете его и отправляете в плату. «Скетч» — так в мире Arduino называют программу.</p>
+            <ol class="steps-list">
+              <li><span>1</span><div><strong>Скачайте Arduino IDE 2</strong><p>Откройте официальный сайт <a href="https://www.arduino.cc/en/software/" target="_blank" rel="noopener noreferrer">arduino.cc/en/software</a> и выберите версию для Windows, macOS или Linux. Не скачивайте установщик со сторонних сайтов.</p></div></li>
+              <li><span>2</span><div><strong>Установите и запустите IDE</strong><p>Следуйте подсказкам установщика. В Windows система может запросить разрешение на установку драйверов — оно нужно для распознавания плат.</p></div></li>
+              <li><span>3</span><div><strong>Подключите плату кабелем</strong><p>Используйте именно кабель передачи данных: некоторые USB-кабели предназначены только для зарядки. На плате должен загореться индикатор питания.</p></div></li>
+              <li><span>4</span><div><strong>Выберите плату и порт</strong><p>В верхнем раскрывающемся списке нажмите «Select Board», затем выберите <strong>Arduino Uno</strong> и появившийся последовательный порт. Можно также открыть «Инструменты → Плата → Arduino AVR Boards → Arduino Uno».</p></div></li>
+              <li><span>5</span><div><strong>Загрузите проверочный пример</strong><p>Откройте «Файл → Примеры → 01.Basics → Blink». Нажмите стрелку «Загрузить» в левом верхнем углу. Встроенный светодиод <code>L</code> должен начать мигать.</p></div></li>
+            </ol>
+            <div class="ide-window" aria-label="Условный вид окна Arduino IDE"><div class="ide-title"><span class="window-dots">● ● ●</span> Blink | Arduino IDE 2</div><div class="ide-toolbar"><span>✓ <small>Проверить</small></span><span>→ <small>Загрузить</small></span><i></i><b>Arduino Uno</b></div><pre><code><span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(<span class="code-orange">1000</span>);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(<span class="code-orange">1000</span>);
+}</code></pre><div class="ide-status">✓ Загрузка завершена</div></div>
+            <div class="note note-warning"><strong>Плата не определяется?</strong><p>Попробуйте другой USB-кабель и порт без переходника. Проверьте, что выбраны правильные плата и порт. Для некоторых совместимых плат с CH340 нужен драйвер от производителя платы. Закройте Монитор порта перед повторной загрузкой, если порт занят.</p></div>
+          </article>
+
+          <article class="lesson-card" id="lesson-4" data-lesson="4">
+            <header class="lesson-header"><span class="lesson-tag">Урок 04 · 20 минут</span><button class="complete-button" type="button" data-complete="4"><span class="check-circle">✓</span><span>Отметить пройденным</span></button></header>
+            <h3>Первая программа: мигаем светодиодом</h3>
+            <p class="lesson-intro">Начнём со встроенного светодиода — для него не нужна схема. Затем разберём каждую строку и подключим внешний светодиод.</p>
+            <div class="code-block"><div class="code-header"><span>Blink.ino</span><button class="copy-button" type="button" data-copy="blink-code">Копировать код</button></div><pre id="blink-code"><code><span class="code-purple">const int</span> LED_PIN = LED_BUILTIN;
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(LED_PIN, OUTPUT);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  digitalWrite(LED_PIN, HIGH);
+  delay(<span class="code-orange">1000</span>);
+  digitalWrite(LED_PIN, LOW);
+  delay(<span class="code-orange">1000</span>);
+}</code></pre></div>
+            <div class="line-by-line"><h4>Что означает каждая строка?</h4><dl><div><dt><code>const int LED_PIN = LED_BUILTIN;</code></dt><dd>Задаём понятное имя контакту. <code>LED_BUILTIN</code> автоматически соответствует встроенному светодиоду выбранной платы.</dd></div><div><dt><code>void setup() { ... }</code></dt><dd>Выполняется один раз после включения или перезапуска. Здесь настраивают контакты и связь.</dd></div><div><dt><code>pinMode(LED_PIN, OUTPUT);</code></dt><dd>Сообщаем, что контакт будет выходом — плата сможет подавать на него напряжение.</dd></div><div><dt><code>void loop() { ... }</code></dt><dd>Повторяется бесконечно: сверху вниз, снова и снова, пока плата включена.</dd></div><div><dt><code>digitalWrite(..., HIGH/LOW);</code></dt><dd>Включает высокий или низкий уровень на выходе.</dd></div><div><dt><code>delay(1000);</code></dt><dd>Делает паузу 1000 миллисекунд, то есть одну секунду. Во время <code>delay()</code> плата не выполняет другие строки программы.</dd></div></dl></div>
+            <h4>Подключаем внешний светодиод</h4>
+            <div class="circuit-steps"><div><span class="wire red-wire"></span><strong>Контакт 13 → резистор → анод</strong><p>Соедините D13 с резистором 220 Ом, а другой вывод резистора — с длинной ножкой светодиода.</p></div><div><span class="wire black-wire"></span><strong>Катод → GND</strong><p>Короткую ножку соедините с любым контактом GND. Цепь должна быть замкнута.</p></div></div>
+            <p>Замените первую строку на <code>const int LED_PIN = 13;</code>. Программа останется прежней, но теперь будет управлять внешним светодиодом.</p>
+            <div class="practice-box"><span class="practice-label">Практика</span><h4>Измените ритм мигания</h4><p>Сделайте сигнал SOS: три коротких включения по 200 мс, три длинных по 600 мс и пауза 1500 мс. Сначала попробуйте сами, затем откройте подсказку.</p><details><summary>Показать подсказку</summary><p>Создайте функцию <code>blink(int duration)</code>, которая включает светодиод, ждёт <code>duration</code>, выключает его и делает паузу 200 мс. В <code>loop()</code> вызовите её три раза с 200 и три раза с 600.</p></details></div>
+          </article>
+
+          <article class="lesson-card" id="lesson-5" data-lesson="5">
+            <header class="lesson-header"><span class="lesson-tag">Урок 05 · 20 минут</span><button class="complete-button" type="button" data-complete="5"><span class="check-circle">✓</span><span>Отметить пройденным</span></button></header>
+            <h3>Кнопки и условия: устройство реагирует</h3>
+            <p class="lesson-intro">Теперь добавим вход. Плата будет проверять состояние кнопки и включать светодиод только при нажатии.</p>
+            <h4>Подключение без внешнего резистора</h4>
+            <p>Соедините один контакт кнопки с <code>D2</code>, а противоположный — с <code>GND</code>. Включим внутренний подтягивающий резистор режимом <code>INPUT_PULLUP</code>. Поэтому логика будет обратной: отпущенная кнопка даёт <code>HIGH</code>, нажатая — <code>LOW</code>.</p>
+            <div class="note"><strong>Почему нельзя оставить вход «в воздухе»?</strong><p>Не подключённый вход улавливает помехи и случайно меняет состояние. Подтяжка задаёт стабильный уровень, когда кнопка разомкнута. У тактовой кнопки ножки попарно соединены; если она работает непредсказуемо, поверните её на 90°.</p></div>
+            <div class="code-block"><div class="code-header"><span>Button.ino</span><button class="copy-button" type="button" data-copy="button-code">Копировать код</button></div><pre id="button-code"><code><span class="code-purple">const int</span> BUTTON_PIN = 2;
+<span class="code-purple">const int</span> LED_PIN = 13;
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  <span class="code-purple">int</span> buttonState = digitalRead(BUTTON_PIN);
+
+  <span class="code-purple">if</span> (buttonState == LOW) {
+    digitalWrite(LED_PIN, HIGH);
+  } <span class="code-purple">else</span> {
+    digitalWrite(LED_PIN, LOW);
+  }
+}</code></pre></div>
+            <h4>Как читать условие</h4>
+            <div class="code-explainer"><code>if (buttonState == LOW)</code><span>→</span><p><strong>Если</strong> значение равно LOW, выполнить блок в фигурных скобках. Иначе выполнить блок после <code>else</code>. Обратите внимание: <code>==</code> сравнивает значения, а одиночное <code>=</code> присваивает значение.</p></div>
+            <div class="two-column-explain"><div><h4>Полезные операторы</h4><p><code>==</code> равно, <code>!=</code> не равно, <code>&gt;</code> больше, <code>&lt;</code> меньше, <code>&amp;&amp;</code> и, <code>||</code> или, <code>!</code> не.</p></div><div><h4>Дребезг контактов</h4><p>Реальная кнопка при нажатии может несколько раз замыкаться и размыкаться. Для переключателей добавляют антидребезг: проверяют, что состояние стабильно хотя бы 20–50 мс.</p></div></div>
+            <div class="practice-box"><span class="practice-label">Попробуйте сами</span><h4>Сделайте переключатель</h4><p>Измените программу так, чтобы каждое нажатие меняло состояние светодиода, а не удерживало его. Сохраняйте состояние в переменной <code>bool ledOn = false;</code> и реагируйте на момент нажатия, а не на удержание.</p></div>
+          </article>
+
+          <article class="lesson-card" id="lesson-6" data-lesson="6">
+            <header class="lesson-header"><span class="lesson-tag">Урок 06 · 25 минут</span><button class="complete-button" type="button" data-complete="6"><span class="check-circle">✓</span><span>Отметить пройденным</span></button></header>
+            <h3>Аналоговый мир: датчики и плавный свет</h3>
+            <p class="lesson-intro">Освещённость, температура и положение ручки редко бывают только «включено» и «выключено». Аналоговый вход позволяет измерять такие величины.</p>
+            <h4>Потенциометр как регулятор</h4>
+            <p>Подключите крайние выводы потенциометра к <code>5V</code> и <code>GND</code>, средний — к <code>A0</code>. Вращение ручки меняет напряжение на среднем выводе. Светодиод с резистором подключите к контакту <code>9</code> и <code>GND</code>.</p>
+            <div class="code-block"><div class="code-header"><span>AnalogControl.ino</span><button class="copy-button" type="button" data-copy="analog-code">Копировать код</button></div><pre id="analog-code"><code><span class="code-purple">const int</span> KNOB_PIN = A0;
+<span class="code-purple">const int</span> LED_PIN = 9;
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(LED_PIN, OUTPUT);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  <span class="code-purple">int</span> sensorValue = analogRead(KNOB_PIN);
+  <span class="code-purple">int</span> brightness = map(sensorValue, 0, 1023, 0, 255);
+  analogWrite(LED_PIN, brightness);
+}</code></pre></div>
+            <div class="range-explain"><div><strong>0 … 1023</strong><span>analogRead()<small>10-битный вход Uno</small></span></div><b>map()</b><div><strong>0 … 255</strong><span>analogWrite()<small>8-битное значение ШИМ</small></span></div></div>
+            <p><code>map()</code> пропорционально переводит число из одного диапазона в другой. <code>analogWrite()</code> на Uno создаёт ШИМ — быстро переключает выход между HIGH и LOW. Чем больше доля времени во включённом состоянии, тем ярче кажется светодиод.</p>
+            <div class="note note-warning"><strong>Аналоговый вход ≠ аналоговый выход</strong><p><code>analogWrite()</code> на Arduino Uno не выдаёт плавно меняющееся постоянное напряжение, а формирует ШИМ. Для управления яркостью это отлично работает. Для настоящего аналогового напряжения нужен ЦАП или фильтр.</p></div>
+            <details class="lesson-extra"><summary>Как подключить фоторезистор?</summary><p>Соберите делитель напряжения: один вывод фоторезистора к 5V, второй к A0; между A0 и GND поставьте постоянный резистор около 10 кОм. Чем темнее, тем обычно выше сопротивление фоторезистора. Считайте A0 и посмотрите значения в Мониторе порта. Направление изменения зависит от того, каким элементом делитель подключён к 5V.</p></details>
+          </article>
+
+          <article class="lesson-card" id="lesson-7" data-lesson="7">
+            <header class="lesson-header"><span class="lesson-tag">Урок 07 · 15 минут</span><button class="complete-button" type="button" data-complete="7"><span class="check-circle">✓</span><span>Отметить пройденным</span></button></header>
+            <h3>Монитор порта: разговор с платой</h3>
+            <p class="lesson-intro">Монитор порта показывает сообщения от Arduino прямо в IDE. Это главный помощник для отладки: вы видите значения датчиков и понимаете, какую часть кода выполняет плата.</p>
+            <div class="code-block"><div class="code-header"><span>SerialMonitor.ino</span><button class="copy-button" type="button" data-copy="serial-code">Копировать код</button></div><pre id="serial-code"><code><span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  Serial.begin(<span class="code-orange">9600</span>);
+  Serial.println(<span class="code-green">"Arduino готова!"</span>);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  <span class="code-purple">int</span> value = analogRead(A0);
+  Serial.print(<span class="code-green">"Значение A0: "</span>);
+  Serial.println(value);
+  delay(<span class="code-orange">500</span>);
+}</code></pre></div>
+            <ol class="compact-steps"><li>Загрузите скетч и нажмите значок лупы справа вверху.</li><li>Внизу Монитора порта выберите скорость <strong>9600 бод</strong> — такую же, как в <code>Serial.begin(9600)</code>.</li><li>Поворачивайте потенциометр: числа должны меняться от 0 до 1023.</li></ol>
+            <div class="serial-demo"><div class="serial-top"><span><i></i> Монитор порта</span><small>9600 бод</small></div><pre>Arduino готова!
+Значение A0: 12
+Значение A0: 147
+Значение A0: 438
+Значение A0: 892
+Значение A0: 1023<span class="terminal-cursor">_</span></pre></div>
+            <div class="two-column-explain"><div><h4><code>print()</code> или <code>println()</code>?</h4><p><code>print()</code> выводит текст и остаётся на той же строке. <code>println()</code> после вывода добавляет переход на новую строку.</p></div><div><h4>Если видите странные символы</h4><p>Чаще всего скорость в Мониторе порта не совпадает со скоростью в скетче. Установите одинаковое значение в обоих местах.</p></div></div>
+            <div class="note"><strong>Полезный приём отладки</strong><p>Добавьте <code>Serial.println("Проверка 1");</code> после участка кода. Если сообщение появилось, плата дошла до этой строки. Выводите не только текст, но и промежуточные значения переменных.</p></div>
+          </article>
+
+          <article class="lesson-card" id="lesson-8" data-lesson="8">
+            <header class="lesson-header"><span class="lesson-tag">Урок 08 · 30 минут</span><button class="complete-button" type="button" data-complete="8"><span class="check-circle">✓</span><span>Отметить пройденным</span></button></header>
+            <h3>Финальный проект: автоматический ночник</h3>
+            <p class="lesson-intro">Объединим всё изученное: датчик измеряет свет, программа принимает решение, а светодиод плавно включается в темноте.</p>
+            <div class="project-bom"><h4>Список деталей</h4><ul><li>Arduino Uno и USB-кабель</li><li>Фоторезистор</li><li>Резистор 10 кОм и резистор 220 Ом</li><li>Светодиод, макетная плата, 5 проводов</li></ul></div>
+            <h4>Схема подключения</h4>
+            <div class="wiring-table"><div><code>5V</code><span>→</span><p>Один вывод фоторезистора</p></div><div><code>A0</code><span>→</span><p>Второй вывод фоторезистора и резистор 10 кОм</p></div><div><code>GND</code><span>→</span><p>Второй вывод резистора 10 кОм</p></div><div><code>D9</code><span>→</span><p>Резистор 220 Ом → длинная ножка светодиода</p></div><div><code>GND</code><span>→</span><p>Короткая ножка светодиода</p></div></div>
+            <div class="code-block"><div class="code-header"><span>NightLight.ino</span><button class="copy-button" type="button" data-copy="night-code">Копировать код</button></div><pre id="night-code"><code><span class="code-purple">const int</span> LIGHT_SENSOR = A0;
+<span class="code-purple">const int</span> LED_PIN = 9;
+<span class="code-purple">const int</span> THRESHOLD = 400;
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(LED_PIN, OUTPUT);
+  Serial.begin(<span class="code-orange">9600</span>);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  <span class="code-purple">int</span> lightLevel = analogRead(LIGHT_SENSOR);
+  Serial.println(lightLevel);
+
+  <span class="code-purple">if</span> (lightLevel &lt; THRESHOLD) {
+    analogWrite(LED_PIN, <span class="code-orange">180</span>);
+  } <span class="code-purple">else</span> {
+    analogWrite(LED_PIN, <span class="code-orange">0</span>);
+  }
+  delay(<span class="code-orange">100</span>);
+}</code></pre></div>
+            <div class="note note-warning"><strong>Настройте порог именно под вашу схему</strong><p>Значение 400 — только отправная точка. Откройте Монитор порта, посмотрите показания при дневном свете и в желаемой темноте, затем выберите порог между ними. Если при затемнении значение растёт, замените <code>&lt;</code> на <code>&gt;</code>.</p></div>
+            <div class="practice-box"><span class="practice-label">Улучшите проект</span><h4>Сделайте плавное включение</h4><p>Вместо резкой смены яркости используйте цикл <code>for (int brightness = 0; brightness &lt;= 180; brightness++)</code>, внутри вызывайте <code>analogWrite()</code> и <code>delay(10)</code>. Добавьте небольшой гистерезис: отдельные пороги включения и выключения, чтобы свет не дрожал на границе.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="simulator-section" id="simulator">
+      <div class="container">
+        <div class="section-heading simulator-heading"><div><div class="eyebrow">Практика без платы</div><h2>Попробуйте прямо <span>в браузере</span></h2></div><p>Это учебная модель поведения, а не электрический симулятор. Меняйте параметры и наблюдайте, как код управляет светодиодом.</p></div>
+        <div class="simulator-shell">
+          <div class="sim-toolbar"><div><span class="sim-status-dot"></span><strong>Arduino Uno</strong><span class="sim-connected">Учебная плата подключена</span></div><button class="sim-reset" id="sim-reset" type="button" title="Сбросить симулятор">↻ <span>Сбросить</span></button></div>
+          <div class="sim-workspace">
+            <div class="sim-circuit-panel">
+              <div class="sim-scene" aria-label="Виртуальная плата Arduino и светодиод">
+                <svg viewBox="0 0 520 290" role="img" aria-label="Схема подключения светодиода к контакту 13 через резистор 220 Ом">
+                  <path d="M80 56H34V234H80" fill="none" stroke="#243a42" stroke-width="8"/>
+                  <rect x="78" y="36" width="252" height="218" rx="12" fill="#137c80"/>
+                  <rect x="72" y="78" width="35" height="64" rx="3" fill="#b4c4c7"/>
+                  <rect x="145" y="130" width="100" height="44" rx="4" fill="#173039"/>
+                  <rect x="112" y="55" width="188" height="18" rx="2" fill="#142c32"/>
+                  <g fill="#d5be85"><circle cx="125" cy="64" r="4"/><circle cx="143" cy="64" r="4"/><circle cx="161" cy="64" r="4"/><circle cx="179" cy="64" r="4"/><circle cx="197" cy="64" r="4"/><circle cx="215" cy="64" r="4"/><circle cx="233" cy="64" r="4"/><circle cx="251" cy="64" r="4"/><circle cx="269" cy="64" r="4"/><circle cx="287" cy="64" r="4"/></g>
+                  <text x="265" y="211" fill="#b5e3d9" text-anchor="middle" font-size="18" font-weight="700" font-family="Arial">ARDUINO UNO</text>
+                  <text x="281" y="89" fill="#d3eee8" font-size="10" font-family="monospace">D13</text>
+                  <text x="103" y="239" fill="#d3eee8" font-size="10" font-family="monospace">GND</text>
+                  <rect x="350" y="60" width="142" height="172" rx="8" fill="#f1ede1"/>
+                  <path d="M354 95H488M354 108H488M354 121H488M354 134H488M354 147H488M354 160H488M354 173H488M354 186H488M354 199H488" stroke="#d5d0c5" stroke-width="2"/>
+                  <g fill="#899296"><circle cx="369" cy="82" r="3"/><circle cx="383" cy="82" r="3"/><circle cx="397" cy="82" r="3"/><circle cx="411" cy="82" r="3"/><circle cx="425" cy="82" r="3"/><circle cx="439" cy="82" r="3"/><circle cx="453" cy="82" r="3"/><circle cx="467" cy="82" r="3"/></g>
+                  <path id="sim-wire-power" d="M287 64C330 64 325 82 369 82" fill="none" stroke="#ef6a5b" stroke-width="4"/>
+                  <path d="M103 226C342 270 332 204 397 204" fill="none" stroke="#283b45" stroke-width="4"/>
+                  <rect x="385" y="75" width="52" height="14" rx="6" fill="#d6b074" transform="rotate(4 385 75)"/><path d="M390 76v13M401 76v13M414 77v12M428 77v12" stroke="#744c3b" stroke-width="3"/>
+                  <path d="M467 82V132" stroke="#ef6a5b" stroke-width="4"/>
+                  <circle class="sim-led-glow" cx="438" cy="151" r="31" fill="#ffca43" opacity="0"/>
+                  <path d="M438 128l-17 25h34z" fill="#f5f0df" stroke="#a2aaa5" stroke-width="2"/>
+                  <circle id="sim-led" cx="438" cy="143" r="14" fill="#776e56"/>
+                  <path d="M432 155v29M445 155v49" stroke="#aab1ad" stroke-width="3"/>
+                  <text x="385" y="251" fill="#788c93" font-size="10" font-family="monospace">R 220 Ω + LED</text>
+                </svg>
+                <div class="sim-board-state"><span id="sim-state-label">Симулятор остановлен</span><strong id="sim-led-label">LED: ВЫКЛ</strong></div>
+              </div>
+              <div class="sim-serial"><div><span>Монитор порта</span><button id="clear-console" type="button">Очистить</button></div><pre id="sim-console" aria-live="polite">Нажмите «Запустить», чтобы начать…</pre></div>
+            </div>
+            <div class="sim-controls-panel">
+              <div class="sim-code"><div><span>Blink.ino</span><small>Код обновляется</small></div><pre><code><span class="code-purple">const int</span> LED_PIN = 13;
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(LED_PIN, OUTPUT);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  digitalWrite(LED_PIN, HIGH);
+  delay(<span class="code-orange" id="code-delay-on">1000</span>);
+  digitalWrite(LED_PIN, LOW);
+  delay(<span class="code-orange" id="code-delay-off">1000</span>);
+}</code></pre></div>
+              <div class="sim-sliders">
+                <label for="interval-range"><span>Время включения и паузы</span><output id="interval-output">1000 мс</output></label>
+                <input type="range" id="interval-range" min="200" max="2000" step="100" value="1000">
+                <div class="range-labels"><span>Быстрее</span><span>Медленнее</span></div>
+                <label for="brightness-range"><span>Яркость свечения</span><output id="brightness-output">100%</output></label>
+                <input type="range" id="brightness-range" min="10" max="100" step="5" value="100">
+                <div class="range-labels"><span>10%</span><span>100%</span></div>
+              </div>
+              <button class="button sim-run" id="sim-run" type="button"><span aria-hidden="true">▶</span> Запустить симулятор</button>
+              <p class="sim-hint">Подсказка: при 200 мс светодиод меняет состояние 5 раз в секунду.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects-section" id="projects">
+      <div class="container">
+        <div class="section-heading"><div><div class="eyebrow">От знаний к делу</div><h2>Три проекта для <span>закрепления</span></h2></div><p>Начните с простого, затем добавляйте свои функции. В каждом проекте есть список деталей и понятный алгоритм.</p></div>
+        <div class="project-grid">
+          <article class="project-card"><div class="project-art traffic-art" aria-hidden="true"><div class="traffic-light"><i></i><i></i><i></i></div><span class="project-level">Легко · 30 минут</span></div><div class="project-body"><h3>Умный светофор</h3><p>Три светодиода переключаются в нужной последовательности, а кнопка запускает переход для пешехода.</p><div class="project-tags"><span>digitalWrite</span><span>Кнопка</span><span>millis</span></div><button class="project-open" type="button" data-project="traffic">Смотреть инструкцию <span>→</span></button></div></article>
+          <article class="project-card"><div class="project-art weather-art" aria-hidden="true"><div class="weather-display"><small>ТЕМПЕРАТУРА</small><strong>23.4°</strong><span>Влажность 48%</span></div><span class="project-level">Средне · 60 минут</span></div><div class="project-body"><h3>Домашняя метеостанция</h3><p>Измеряйте температуру и влажность датчиком DHT22 и выводите показания на дисплей.</p><div class="project-tags"><span>DHT22</span><span>I²C</span><span>Дисплей</span></div><button class="project-open" type="button" data-project="weather">Смотреть инструкцию <span>→</span></button></div></article>
+          <article class="project-card"><div class="project-art plant-art" aria-hidden="true"><div class="plant-pot"><span>♧</span><i></i><b>72%</b></div><span class="project-level">Средне · 90 минут</span></div><div class="project-body"><h3>Контроль полива</h3><p>Датчик влажности почвы подскажет, когда растению нужна вода. Сначала — индикация, затем насос.</p><div class="project-tags"><span>analogRead</span><span>Калибровка</span><span>Драйвер</span></div><button class="project-open" type="button" data-project="plant">Смотреть инструкцию <span>→</span></button></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="troubleshooting-section">
+      <div class="container troubleshooting-grid"><div><div class="eyebrow">Если что-то пошло не так</div><h2>Не работает? <span>Это нормально.</span></h2><p>Ошибки — часть изобретательства. Пройдите по короткому списку: большинство проблем решается за несколько минут.</p><a href="#faq" class="text-link">Все частые вопросы ↓</a></div><div class="checklist"><label><input type="checkbox"><span><strong>Питание</strong>Плата включена, кабель поддерживает передачу данных</span></label><label><input type="checkbox"><span><strong>Плата и порт</strong>В IDE выбраны правильные плата и порт</span></label><label><input type="checkbox"><span><strong>Общий GND</strong>Все части схемы имеют общий минус</span></label><label><input type="checkbox"><span><strong>Контакты</strong>Номера выводов в коде совпадают со схемой</span></label><label><input type="checkbox"><span><strong>Полярность</strong>Светодиод подключён длинной ножкой к выходу</span></label></div></div>
+    </section>
+
+    <section class="quiz-section" id="quiz">
+      <div class="container quiz-container">
+        <div class="section-heading quiz-heading"><div><div class="eyebrow">Небольшая проверка</div><h2>Готовы проверить <span>себя?</span></h2></div><p>5 вопросов по основам. После ответа объясним, почему выбранный вариант правильный.</p></div>
+        <div class="quiz-card" id="quiz-card">
+          <div class="quiz-top"><span id="quiz-counter">Вопрос 1 из 5</span><div class="quiz-dots" id="quiz-dots" aria-hidden="true"></div></div>
+          <div id="quiz-content">
+            <h3 id="quiz-question">Загрузка вопроса…</h3>
+            <div class="quiz-options" id="quiz-options"></div>
+            <div class="quiz-feedback" id="quiz-feedback" hidden></div>
+            <button class="button button-primary quiz-next" id="quiz-next" type="button" hidden>Следующий вопрос <span>→</span></button>
+          </div>
+          <div class="quiz-result" id="quiz-result" hidden><div class="result-ring"><strong id="quiz-score">0/5</strong></div><h3 id="result-title"></h3><p id="result-text"></p><button class="button button-primary" id="quiz-restart" type="button">Пройти ещё раз</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+      <div class="container faq-grid"><div><div class="eyebrow">Коротко о важном</div><h2>Частые вопросы</h2><p>Остались сомнения перед стартом? Скорее всего, ответ уже здесь.</p></div><div class="faq-list">
+        <details><summary>Нужно ли уметь программировать?<span>+</span></summary><p>Нет. Курс начинается с самых основ. Сначала вы будете менять готовые примеры, затем постепенно научитесь писать собственные программы. Достаточно базовых навыков работы с компьютером.</p></details>
+        <details><summary>Какую плату купить первой?<span>+</span></summary><p>Для этого курса удобнее всего Arduino Uno или качественная совместимая плата с тем же расположением контактов. Проверьте тип USB-разъёма и наличие кабеля в комплекте. Набор с макетной платой, резисторами, светодиодами и проводами избавит от отдельных покупок.</p></details>
+        <details><summary>Можно ли учиться совсем без платы?<span>+</span></summary><p>Да: читайте уроки и экспериментируйте с нашим браузерным симулятором. Для полноценной практики также существуют внешние электронные симуляторы, но реальная плата даёт важный опыт сборки и поиска неисправностей.</p></details>
+        <details><summary>Чем Arduino отличается от Raspberry Pi?<span>+</span></summary><p>Arduino Uno — плата с микроконтроллером для простых задач в реальном времени: опросить датчик, включить мотор. Raspberry Pi — одноплатный компьютер с операционной системой. Для сложных вычислений, камеры и веб-сервера чаще выбирают Raspberry Pi, для простого управления электроникой — микроконтроллер.</p></details>
+        <details><summary>Можно ли питать мотор прямо от контакта Arduino?<span>+</span></summary><p>Нет. Вывод микроконтроллера не рассчитан на ток мотора. Используйте подходящий драйвер, отдельное питание нужной мощности и общий GND. Для индуктивной нагрузки нужна защита от выбросов напряжения; схема зависит от драйвера и мотора.</p></details>
+        <details><summary>Что изучать после этого курса?<span>+</span></summary><p>Освойте функции, массивы, библиотеки, неблокирующие задержки на <code>millis()</code>, прерывания и протоколы I²C/SPI. Затем выберите собственный проект: он поможет собрать знания в систему лучше, чем бесконечное чтение теории.</p></details>
+      </div></div>
+    </section>
+
+    <section class="final-cta"><div class="container"><span class="cta-board" aria-hidden="true">∞</span><h2>Ваше первое устройство<br>начинается с <span>одной строки кода</span></h2><p>Не ждите идеального момента. Откройте первый урок и зажгите свой первый светодиод.</p><a class="button button-light" href="#lesson-1">Начать с первого урока <span>→</span></a></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-main"><div><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span><i>+</i><b>−</b></span><span>ардуино<span class="brand-accent">с нуля</span></span></a><p>Понятный курс по электронике<br>и программированию для каждого.</p></div><div><strong>Обучение</strong><a href="#course">Все уроки</a><a href="#simulator">Симулятор</a><a href="#projects">Проекты</a></div><div><strong>Помощь</strong><a href="#faq">Частые вопросы</a><a href="https://docs.arduino.cc/" target="_blank" rel="noopener noreferrer">Документация Arduino ↗</a><a href="https://www.arduino.cc/en/software/" target="_blank" rel="noopener noreferrer">Скачать Arduino IDE ↗</a></div><div class="footer-note"><strong>Учитесь безопасно</strong><p>Работайте с низким напряжением. Не подключайте учебные схемы к бытовой сети 220 В.</p></div></div><div class="container footer-bottom"><span>Сделано с интересом к изобретательству</span><span>Учитесь. Собирайте. Экспериментируйте.</span></div></footer>
+
+  <dialog class="project-modal" id="project-modal" aria-labelledby="modal-title"><button class="modal-close icon-button" type="button" aria-label="Закрыть инструкцию">×</button><div id="modal-content"></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
