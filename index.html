@@ -21,6 +21,7 @@
       <nav class="main-nav" id="main-nav" aria-label="Основная навигация">
         <a href="#course">Уроки</a>
         <a href="#simulator">Симулятор</a>
+        <a href="#examples">Примеры</a>
         <a href="#projects">Проекты</a>
         <a href="#quiz">Проверка знаний</a>
       </nav>
@@ -371,6 +372,232 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="examples-section" id="examples">
+      <div class="container">
+        <div class="section-heading"><div><div class="eyebrow">Новая практика</div><h2>Ещё пять примеров: <span>от кнопки до игры</span></h2></div><p>Выберите пример, изучите схему и код, а затем проверьте его работу в браузере. Настоящая плата для практики не нужна.</p></div>
+        <div class="example-tabs" role="tablist" aria-label="Дополнительные примеры Arduino">
+          <button class="example-tab active" id="tab-button" type="button" role="tab" aria-selected="true" aria-controls="example-button" data-example="button"><span>01</span>Кнопка-переключатель</button>
+          <button class="example-tab" id="tab-millis" type="button" role="tab" aria-selected="false" aria-controls="example-millis" data-example="millis" tabindex="-1"><span>02</span>Два процесса</button>
+          <button class="example-tab" id="tab-rgb" type="button" role="tab" aria-selected="false" aria-controls="example-rgb" data-example="rgb" tabindex="-1"><span>03</span>RGB-светодиод</button>
+          <button class="example-tab" id="tab-distance" type="button" role="tab" aria-selected="false" aria-controls="example-distance" data-example="distance" tabindex="-1"><span>04</span>Дальномер</button>
+          <button class="example-tab" id="tab-reaction" type="button" role="tab" aria-selected="false" aria-controls="example-reaction" data-example="reaction" tabindex="-1"><span>05</span>Игра на реакцию</button>
+        </div>
+
+        <article class="example-panel" id="example-button" role="tabpanel" aria-labelledby="tab-button" data-panel="button">
+          <div class="example-theory">
+            <span class="lesson-tag">Цифровой вход · антидребезг</span>
+            <h3>Кнопка-переключатель</h3>
+            <p class="example-lead">Сделаем так, чтобы короткое нажатие меняло состояние светодиода, а удержание кнопки не вызывало непрерывное переключение.</p>
+            <div class="example-wiring"><strong>Соберите схему</strong><p><code>D2</code> → кнопка → <code>GND</code>; <code>D13</code> → резистор 220 Ом → анод светодиода; катод → <code>GND</code>. Для кнопки используем внутреннюю подтяжку <code>INPUT_PULLUP</code>.</p></div>
+            <div class="code-block"><div class="code-header"><span>DebouncedToggle.ino</span><button class="copy-button" type="button" data-copy="debounce-code">Копировать код</button></div><pre id="debounce-code"><code><span class="code-purple">const int</span> BUTTON_PIN = 2;
+<span class="code-purple">const int</span> LED_PIN = 13;
+<span class="code-purple">bool</span> ledOn = <span class="code-orange">false</span>;
+<span class="code-purple">bool</span> lastReading = HIGH;
+<span class="code-purple">bool</span> stableState = HIGH;
+<span class="code-purple">unsigned long</span> lastChange = 0;
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  <span class="code-purple">bool</span> reading = digitalRead(BUTTON_PIN);
+  <span class="code-purple">if</span> (reading != lastReading) {
+    lastChange = millis();
+    lastReading = reading;
+  }
+  <span class="code-purple">if</span> (millis() - lastChange &gt;= 30 &amp;&amp; reading != stableState) {
+    stableState = reading;
+    <span class="code-purple">if</span> (stableState == LOW) {
+      ledOn = !ledOn;
+      digitalWrite(LED_PIN, ledOn);
+    }
+  }
+}</code></pre></div>
+            <div class="example-explanation"><h4>Как это работает</h4><p>При любом изменении входа программа запускает отсчёт заново. Новое состояние признаётся настоящим только после 30 мс стабильности. Переключение происходит один раз — в момент подтверждённого нажатия <code>LOW</code>. Вычитание <code>millis() - lastChange</code> корректно работает и при переполнении таймера.</p></div>
+            <div class="practice-box"><span class="practice-label">Задание</span><h4>Добавьте второй светодиод</h4><p>Подключите его к D8 через собственный резистор. Пусть он показывает состояние кнопки, пока основной светодиод остаётся переключателем.</p></div>
+          </div>
+          <aside class="example-playground"><div class="playground-heading"><span>Браузерная практика</span><i>Готово</i></div><h4>Нажмите и отпустите</h4><p>Модель имитирует подтверждение нажатия после 30 мс.</p><div class="mini-led" id="toggle-demo-led" aria-hidden="true"></div><strong class="playground-state" id="toggle-demo-state">Светодиод выключен</strong><button class="hardware-button" id="virtual-toggle" type="button"><span></span>Нажать кнопку</button><div class="mini-console" id="toggle-demo-log" aria-live="polite">Ожидание нажатия…</div></aside>
+        </article>
+
+        <article class="example-panel" id="example-millis" role="tabpanel" aria-labelledby="tab-millis" data-panel="millis" hidden>
+          <div class="example-theory">
+            <span class="lesson-tag">Таймеры · без delay()</span>
+            <h3>Два независимых процесса</h3>
+            <p class="example-lead">Один светодиод будет мигать каждые 300 мс, другой — каждые 1000 мс. Оба процесса выполняются в одном <code>loop()</code> и не блокируют друг друга.</p>
+            <div class="example-wiring"><strong>Соберите схему</strong><p>Первый светодиод через резистор 220 Ом подключите к <code>D12</code>, второй через отдельный резистор — к <code>D13</code>. Катоды соедините с <code>GND</code>.</p></div>
+            <div class="code-block"><div class="code-header"><span>TwoTimers.ino</span><button class="copy-button" type="button" data-copy="millis-code">Копировать код</button></div><pre id="millis-code"><code><span class="code-purple">unsigned long</span> fastPrevious = 0;
+<span class="code-purple">unsigned long</span> slowPrevious = 0;
+<span class="code-purple">bool</span> fastState = <span class="code-orange">false</span>;
+<span class="code-purple">bool</span> slowState = <span class="code-orange">false</span>;
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(<span class="code-orange">12</span>, OUTPUT);
+  pinMode(<span class="code-orange">13</span>, OUTPUT);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  <span class="code-purple">unsigned long</span> now = millis();
+  <span class="code-purple">if</span> (now - fastPrevious &gt;= 300) {
+    fastPrevious = now;
+    fastState = !fastState;
+    digitalWrite(<span class="code-orange">12</span>, fastState);
+  }
+  <span class="code-purple">if</span> (now - slowPrevious &gt;= 1000) {
+    slowPrevious = now;
+    slowState = !slowState;
+    digitalWrite(<span class="code-orange">13</span>, slowState);
+  }
+}</code></pre></div>
+            <div class="example-explanation"><h4>Почему здесь нет delay()</h4><p><code>millis()</code> возвращает время работы платы в миллисекундах. Программа мгновенно проверяет оба таймера и идёт дальше. Поэтому сюда легко добавить опрос кнопки или датчика. Сохранение <code>previous = now</code> задаёт период от момента срабатывания; для более строгого расписания используют <code>previous += interval</code>.</p></div>
+            <div class="practice-box"><span class="practice-label">Задание</span><h4>Добавьте кнопку аварийной остановки</h4><p>При нажатии оба светодиода должны гаснуть, а таймеры — останавливаться до следующего нажатия. Проверку кнопки выполняйте в том же <code>loop()</code>.</p></div>
+          </div>
+          <aside class="example-playground"><div class="playground-heading"><span>Браузерная практика</span><i>millis()</i></div><h4>Два ритма одновременно</h4><p>Быстрый канал переключается каждые 300 мс, медленный — каждые 1000 мс.</p><div class="dual-led-demo"><div><div class="mini-led" id="fast-demo-led"></div><strong>D12</strong><span>300 мс</span></div><div><div class="mini-led" id="slow-demo-led"></div><strong>D13</strong><span>1000 мс</span></div></div><button class="button playground-button" id="millis-demo-run" type="button">▶ Запустить таймеры</button><div class="mini-console" id="millis-demo-log">Оба процесса остановлены</div></aside>
+        </article>
+
+        <article class="example-panel" id="example-rgb" role="tabpanel" aria-labelledby="tab-rgb" data-panel="rgb" hidden>
+          <div class="example-theory">
+            <span class="lesson-tag">ШИМ · три канала</span>
+            <h3>RGB-светодиод и смешивание цветов</h3>
+            <p class="example-lead">Красный, зелёный и синий каналы управляются независимо. Меняя яркость каждого от 0 до 255, можно получить множество оттенков.</p>
+            <div class="example-wiring"><strong>Соберите схему</strong><p>Для RGB-светодиода с <strong>общим катодом</strong>: каналы R, G, B через отдельные резисторы 220 Ом подключите к <code>D9</code>, <code>D10</code>, <code>D11</code>, общий катод — к <code>GND</code>. У модели с общим анодом схема и логика будут другими.</p></div>
+            <div class="code-block"><div class="code-header"><span>RGBColor.ino</span><button class="copy-button" type="button" data-copy="rgb-code">Копировать код</button></div><pre id="rgb-code"><code><span class="code-purple">const int</span> RED_PIN = 9;
+<span class="code-purple">const int</span> GREEN_PIN = 10;
+<span class="code-purple">const int</span> BLUE_PIN = 11;
+
+<span class="code-purple">void</span> <span class="code-blue">setColor</span>(<span class="code-purple">int</span> red, <span class="code-purple">int</span> green, <span class="code-purple">int</span> blue) {
+  analogWrite(RED_PIN, red);
+  analogWrite(GREEN_PIN, green);
+  analogWrite(BLUE_PIN, blue);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(RED_PIN, OUTPUT);
+  pinMode(GREEN_PIN, OUTPUT);
+  pinMode(BLUE_PIN, OUTPUT);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  setColor(<span class="code-orange">255</span>, <span class="code-orange">80</span>, <span class="code-orange">0</span>);
+  delay(<span class="code-orange">1000</span>);
+  setColor(<span class="code-orange">0</span>, <span class="code-orange">180</span>, <span class="code-orange">255</span>);
+  delay(<span class="code-orange">1000</span>);
+}</code></pre></div>
+            <div class="example-explanation"><h4>Функция убирает повторения</h4><p><code>setColor()</code> принимает три значения и управляет всеми каналами сразу. Теперь для смены оттенка достаточно одной строки. Значения можно получать с трёх потенциометров или плавно изменять в цикле.</p></div>
+            <div class="practice-box"><span class="practice-label">Задание</span><h4>Создайте плавную радугу</h4><p>Изменяйте каналы небольшими шагами с паузой 10–20 мс. Следите, чтобы значения не выходили за диапазон 0–255.</p></div>
+          </div>
+          <aside class="example-playground"><div class="playground-heading"><span>Браузерная практика</span><i>0…255</i></div><h4>Смешайте свой цвет</h4><div class="rgb-preview" id="rgb-preview"><span id="rgb-hex">#FF5000</span></div><div class="rgb-controls"><label><span>Красный</span><output id="red-output">255</output><input id="red-range" type="range" min="0" max="255" value="255"></label><label><span>Зелёный</span><output id="green-output">80</output><input id="green-range" type="range" min="0" max="255" value="80"></label><label><span>Синий</span><output id="blue-output">0</output><input id="blue-range" type="range" min="0" max="255" value="0"></label></div><button class="text-demo-button" id="rgb-random" type="button">Случайный цвет ↻</button></aside>
+        </article>
+
+        <article class="example-panel" id="example-distance" role="tabpanel" aria-labelledby="tab-distance" data-panel="distance" hidden>
+          <div class="example-theory">
+            <span class="lesson-tag">Ультразвук · измерение времени</span>
+            <h3>Парковочный помощник на HC-SR04</h3>
+            <p class="example-lead">Датчик отправляет короткий ультразвуковой импульс и измеряет время возвращения эха. Чем ближе препятствие, тем чаще звучит сигнал и тем тревожнее индикация.</p>
+            <div class="example-wiring"><strong>Соберите схему</strong><p><code>VCC</code> → 5V, <code>GND</code> → GND, <code>TRIG</code> → D7, <code>ECHO</code> → D8. Красный, жёлтый и зелёный светодиоды через отдельные резисторы подключите к D4, D3 и D2. Для звука можно добавить пьезодинамик на D9.</p></div>
+            <div class="code-block"><div class="code-header"><span>DistanceMeter.ino</span><button class="copy-button" type="button" data-copy="distance-code">Копировать код</button></div><pre id="distance-code"><code><span class="code-purple">const int</span> TRIG_PIN = 7;
+<span class="code-purple">const int</span> ECHO_PIN = 8;
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  Serial.begin(<span class="code-orange">9600</span>);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(<span class="code-orange">2</span>);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(<span class="code-orange">10</span>);
+  digitalWrite(TRIG_PIN, LOW);
+
+  <span class="code-purple">unsigned long</span> duration = pulseIn(ECHO_PIN, HIGH, 30000);
+  <span class="code-purple">if</span> (duration == 0) {
+    Serial.println(<span class="code-green">"Эхо не получено"</span>);
+  } <span class="code-purple">else</span> {
+    <span class="code-purple">float</span> distance = duration * 0.0343 / 2;
+    Serial.print(distance);
+    Serial.println(<span class="code-green">" см"</span>);
+  }
+  delay(<span class="code-orange">100</span>);
+}</code></pre></div>
+            <div class="example-explanation"><h4>Почему делим на два</h4><p>Звук проходит путь до препятствия <strong>и обратно</strong>. Скорость звука около 343 м/с, поэтому расстояние в сантиметрах приблизительно равно <code>время_мкс × 0,0343 / 2</code>. Тайм-аут 30 000 мкс не даёт <code>pulseIn()</code> ждать слишком долго. Для индикации добавьте условия: до 20 см — красный, 20–50 см — жёлтый, дальше — зелёный.</p></div>
+            <div class="practice-box"><span class="practice-label">Задание</span><h4>Отфильтруйте ошибочные измерения</h4><p>Сохраните пять последних расстояний в массив и вычислите медиану. Не используйте нулевые значения при отсутствии эха.</p></div>
+          </div>
+          <aside class="example-playground"><div class="playground-heading"><span>Браузерная практика</span><i>HC-SR04</i></div><h4>Измените расстояние</h4><div class="distance-scene"><div class="sensor-icon"><i></i><i></i></div><div class="distance-wave"></div><div class="distance-wall"></div></div><output class="distance-value" id="distance-value">80 см</output><input class="wide-range" id="distance-range" type="range" min="2" max="200" value="80"><div class="distance-lights"><span id="distance-red">Красный<br><small>до 20 см</small></span><span id="distance-yellow">Жёлтый<br><small>20–50 см</small></span><span id="distance-green">Зелёный<br><small>от 50 см</small></span></div><div class="mini-console" id="distance-console">Безопасное расстояние. Зелёный индикатор включён.</div></aside>
+        </article>
+
+        <article class="example-panel" id="example-reaction" role="tabpanel" aria-labelledby="tab-reaction" data-panel="reaction" hidden>
+          <div class="example-theory">
+            <span class="lesson-tag">Случайные числа · конечный автомат</span>
+            <h3>Игра на реакцию</h3>
+            <p class="example-lead">После старта светодиод загорается через случайный интервал. Игрок должен нажать кнопку как можно быстрее — но нажатие раньше сигнала засчитывается как фальстарт.</p>
+            <div class="example-wiring"><strong>Соберите схему</strong><p>Кнопку подключите между <code>D2</code> и <code>GND</code>, светодиод через резистор 220 Ом — к <code>D13</code>. Кнопка работает в режиме <code>INPUT_PULLUP</code>.</p></div>
+            <div class="code-block"><div class="code-header"><span>ReactionGame.ino</span><button class="copy-button" type="button" data-copy="reaction-code">Копировать код</button></div><pre id="reaction-code"><code><span class="code-purple">enum</span> State { IDLE, WAITING, SIGNAL };
+State state = IDLE;
+<span class="code-purple">const int</span> BUTTON_PIN = 2;
+<span class="code-purple">const int</span> LED_PIN = 13;
+<span class="code-purple">unsigned long</span> signalAt = 0;
+<span class="code-purple">unsigned long</span> signalTime = 0;
+<span class="code-purple">bool</span> previousButton = HIGH;
+
+<span class="code-purple">bool</span> <span class="code-blue">buttonPressed</span>() {
+  <span class="code-purple">bool</span> current = digitalRead(BUTTON_PIN);
+  <span class="code-purple">bool</span> pressed = previousButton == HIGH &amp;&amp; current == LOW;
+  previousButton = current;
+  <span class="code-purple">return</span> pressed;
+}
+
+<span class="code-purple">void</span> <span class="code-blue">setup</span>() {
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
+  Serial.begin(<span class="code-orange">9600</span>);
+  randomSeed(analogRead(A0));
+  Serial.println(<span class="code-green">"Нажмите кнопку для старта"</span>);
+}
+
+<span class="code-purple">void</span> <span class="code-blue">loop</span>() {
+  <span class="code-purple">bool</span> pressed = buttonPressed();
+  <span class="code-purple">switch</span> (state) {
+    <span class="code-purple">case</span> IDLE:
+      <span class="code-purple">if</span> (pressed) {
+        digitalWrite(LED_PIN, LOW);
+        signalAt = millis() + random(<span class="code-orange">1000</span>, <span class="code-orange">4001</span>);
+        state = WAITING;
+        Serial.println(<span class="code-green">"Ждите сигнал…"</span>);
+      }
+      <span class="code-purple">break</span>;
+    <span class="code-purple">case</span> WAITING:
+      <span class="code-purple">if</span> (pressed) {
+        Serial.println(<span class="code-green">"Фальстарт!"</span>);
+        state = IDLE;
+      } <span class="code-purple">else if</span> ((<span class="code-purple">long</span>)(millis() - signalAt) &gt;= 0) {
+        digitalWrite(LED_PIN, HIGH);
+        signalTime = millis();
+        state = SIGNAL;
+        Serial.println(<span class="code-green">"Нажимайте!"</span>);
+      }
+      <span class="code-purple">break</span>;
+    <span class="code-purple">case</span> SIGNAL:
+      <span class="code-purple">if</span> (pressed) {
+        Serial.print(<span class="code-green">"Реакция: "</span>);
+        Serial.print(millis() - signalTime);
+        Serial.println(<span class="code-green">" мс"</span>);
+        digitalWrite(LED_PIN, LOW);
+        state = IDLE;
+      }
+      <span class="code-purple">break</span>;
+  }
+}</code></pre></div>
+            <div class="example-explanation"><h4>Программа помнит своё состояние</h4><p>В <code>IDLE</code> игра ждёт старт, в <code>WAITING</code> проверяет фальстарт и случайный таймер, в <code>SIGNAL</code> измеряет реакцию. Функция <code>buttonPressed()</code> замечает только переход от отпущенной кнопки к нажатой. Для реального устройства добавьте антидребезг из первого примера, чтобы вибрация контактов не создавала ложных нажатий.</p></div>
+            <div class="practice-box"><span class="practice-label">Задание</span><h4>Сохраните лучший результат</h4><p>Добавьте переменную <code>bestTime</code>, выводите рекорд в Монитор порта и предусмотрите сброс игры долгим нажатием.</p></div>
+          </div>
+          <aside class="example-playground reaction-playground"><div class="playground-heading"><span>Браузерная практика</span><i>Полная игра</i></div><h4>Проверьте свою реакцию</h4><p>Нажмите «Старт», ждите зелёный сигнал и сразу нажимайте большую кнопку. Не нажимайте раньше!</p><div class="reaction-stage" id="reaction-stage"><div class="mini-led" id="reaction-led"></div><strong id="reaction-message">Готовы начать?</strong><span id="reaction-result">Лучший результат: —</span></div><button class="button playground-button" id="reaction-start" type="button">Старт</button><button class="reaction-hit" id="reaction-hit" type="button" disabled>НАЖАТЬ!</button></aside>
+        </article>
       </div>
     </section>
 

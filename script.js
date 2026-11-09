@@ -405,3 +405,198 @@ projectModal.addEventListener('click', event => {
   }
 });
 projectModal.addEventListener('close', () => document.body.classList.remove('modal-open'));
+
+const exampleTabs = [...document.querySelectorAll('.example-tab')];
+const examplePanels = [...document.querySelectorAll('.example-panel')];
+
+function activateExample(name, focusTab = false) {
+  exampleTabs.forEach(tab => {
+    const active = tab.dataset.example === name;
+    tab.classList.toggle('active', active);
+    tab.setAttribute('aria-selected', String(active));
+    tab.tabIndex = active ? 0 : -1;
+    if (active && focusTab) tab.focus();
+  });
+  examplePanels.forEach(panel => { panel.hidden = panel.dataset.panel !== name; });
+}
+
+exampleTabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => activateExample(tab.dataset.example));
+  tab.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    let nextIndex = index;
+    if (event.key === 'ArrowRight') nextIndex = (index + 1) % exampleTabs.length;
+    if (event.key === 'ArrowLeft') nextIndex = (index - 1 + exampleTabs.length) % exampleTabs.length;
+    if (event.key === 'Home') nextIndex = 0;
+    if (event.key === 'End') nextIndex = exampleTabs.length - 1;
+    activateExample(exampleTabs[nextIndex].dataset.example, true);
+  });
+});
+
+const virtualToggle = document.getElementById('virtual-toggle');
+const toggleDemoLed = document.getElementById('toggle-demo-led');
+let toggleDemoOn = false;
+let toggleDemoCount = 0;
+
+virtualToggle.addEventListener('click', () => {
+  virtualToggle.disabled = true;
+  virtualToggle.classList.add('pressed');
+  document.getElementById('toggle-demo-log').textContent = 'Вход D2: LOW\nПроверяем стабильность 30 мс…';
+  setTimeout(() => {
+    toggleDemoOn = !toggleDemoOn;
+    toggleDemoCount += 1;
+    toggleDemoLed.classList.toggle('on', toggleDemoOn);
+    document.getElementById('toggle-demo-state').textContent = toggleDemoOn ? 'Светодиод включён' : 'Светодиод выключен';
+    document.getElementById('toggle-demo-log').textContent = `Нажатие ${toggleDemoCount} подтверждено\nD13: ${toggleDemoOn ? 'HIGH' : 'LOW'}`;
+  }, 30);
+  setTimeout(() => {
+    virtualToggle.disabled = false;
+    virtualToggle.classList.remove('pressed');
+  }, 140);
+});
+
+const fastDemoLed = document.getElementById('fast-demo-led');
+const slowDemoLed = document.getElementById('slow-demo-led');
+const millisDemoRun = document.getElementById('millis-demo-run');
+let millisDemoRunning = false;
+let fastDemoTimer = null;
+let slowDemoTimer = null;
+
+function stopMillisDemo() {
+  millisDemoRunning = false;
+  clearInterval(fastDemoTimer);
+  clearInterval(slowDemoTimer);
+  fastDemoLed.classList.remove('on');
+  slowDemoLed.classList.remove('on');
+  millisDemoRun.classList.remove('running');
+  millisDemoRun.textContent = '▶ Запустить таймеры';
+  document.getElementById('millis-demo-log').textContent = 'Оба процесса остановлены';
+}
+
+millisDemoRun.addEventListener('click', () => {
+  if (millisDemoRunning) {
+    stopMillisDemo();
+    return;
+  }
+  millisDemoRunning = true;
+  fastDemoTimer = setInterval(() => fastDemoLed.classList.toggle('on'), 300);
+  slowDemoTimer = setInterval(() => slowDemoLed.classList.toggle('on'), 1000);
+  millisDemoRun.classList.add('running');
+  millisDemoRun.textContent = '■ Остановить таймеры';
+  document.getElementById('millis-demo-log').textContent = 'D12: период 300 мс\nD13: период 1000 мс\nОпрос кнопок остаётся доступным';
+});
+
+const rgbChannels = ['red', 'green', 'blue'];
+
+function updateRgbDemo() {
+  const values = rgbChannels.map(channel => Number(document.getElementById(`${channel}-range`).value));
+  values.forEach((value, index) => {
+    document.getElementById(`${rgbChannels[index]}-output`).textContent = String(value);
+  });
+  const hex = `#${values.map(value => value.toString(16).padStart(2, '0')).join('').toUpperCase()}`;
+  document.getElementById('rgb-preview').style.background = hex;
+  document.getElementById('rgb-hex').textContent = hex;
+}
+
+rgbChannels.forEach(channel => document.getElementById(`${channel}-range`).addEventListener('input', updateRgbDemo));
+document.getElementById('rgb-random').addEventListener('click', () => {
+  rgbChannels.forEach(channel => {
+    document.getElementById(`${channel}-range`).value = String(Math.floor(Math.random() * 256));
+  });
+  updateRgbDemo();
+});
+updateRgbDemo();
+
+const distanceRange = document.getElementById('distance-range');
+
+function updateDistanceDemo() {
+  const distance = Number(distanceRange.value);
+  document.getElementById('distance-value').textContent = `${distance} см`;
+  const zone = distance < 20 ? 'red' : distance <= 50 ? 'yellow' : 'green';
+  ['red', 'yellow', 'green'].forEach(color => {
+    document.getElementById(`distance-${color}`).classList.toggle('active', color === zone);
+  });
+  const messages = {
+    red: 'Близко! Красный индикатор и частый звуковой сигнал.',
+    yellow: 'Препятствие приближается. Жёлтый индикатор включён.',
+    green: 'Безопасное расстояние. Зелёный индикатор включён.'
+  };
+  document.getElementById('distance-console').textContent = messages[zone];
+  document.querySelector('.distance-wave').style.opacity = distance < 20 ? '.35' : '1';
+}
+
+distanceRange.addEventListener('input', updateDistanceDemo);
+updateDistanceDemo();
+
+const reactionStart = document.getElementById('reaction-start');
+const reactionHit = document.getElementById('reaction-hit');
+const reactionStage = document.getElementById('reaction-stage');
+const reactionLed = document.getElementById('reaction-led');
+const reactionMessage = document.getElementById('reaction-message');
+const reactionResult = document.getElementById('reaction-result');
+let reactionState = 'idle';
+let reactionTimer = null;
+let reactionSignalTime = 0;
+let reactionBest = 0;
+
+try {
+  reactionBest = Number(localStorage.getItem('arduinoReactionBest') || 0);
+} catch (error) {
+  reactionBest = 0;
+}
+if (reactionBest > 0) reactionResult.textContent = `Лучший результат: ${reactionBest} мс`;
+
+function resetReactionStage() {
+  reactionStage.className = 'reaction-stage';
+  reactionLed.classList.remove('on');
+  reactionStart.disabled = false;
+  reactionStart.textContent = 'Сыграть ещё раз';
+  reactionHit.disabled = true;
+}
+
+reactionStart.addEventListener('click', () => {
+  clearTimeout(reactionTimer);
+  reactionState = 'waiting';
+  reactionStage.className = 'reaction-stage ready';
+  reactionLed.classList.remove('on');
+  reactionMessage.textContent = 'Ждите зелёный сигнал…';
+  reactionResult.textContent = reactionBest > 0 ? `Лучший результат: ${reactionBest} мс` : 'Не нажимайте раньше времени';
+  reactionStart.disabled = true;
+  reactionHit.disabled = false;
+  const delay = Math.floor(Math.random() * 3001) + 1000;
+  reactionTimer = setTimeout(() => {
+    reactionState = 'signal';
+    reactionSignalTime = performance.now();
+    reactionStage.className = 'reaction-stage signal';
+    reactionLed.classList.add('on');
+    reactionMessage.textContent = 'Нажимайте!';
+  }, delay);
+});
+
+reactionHit.addEventListener('click', () => {
+  if (reactionState === 'waiting') {
+    clearTimeout(reactionTimer);
+    reactionState = 'early';
+    reactionStage.className = 'reaction-stage early';
+    reactionMessage.textContent = 'Фальстарт! Вы нажали раньше сигнала.';
+    reactionResult.textContent = 'Попробуйте ещё раз и дождитесь зелёного цвета.';
+    resetReactionStage();
+    reactionStage.className = 'reaction-stage early';
+    return;
+  }
+  if (reactionState !== 'signal') return;
+  const elapsed = Math.round(performance.now() - reactionSignalTime);
+  reactionState = 'result';
+  if (!reactionBest || elapsed < reactionBest) {
+    reactionBest = elapsed;
+    try {
+      localStorage.setItem('arduinoReactionBest', String(reactionBest));
+    } catch (error) {
+      reactionBest = elapsed;
+    }
+  }
+  resetReactionStage();
+  reactionMessage.textContent = `Ваша реакция: ${elapsed} мс`;
+  reactionResult.textContent = `Лучший результат: ${reactionBest} мс`;
+});
