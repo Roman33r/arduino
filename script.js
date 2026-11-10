@@ -805,6 +805,44 @@ lessonWiringDiagrams.forEach(diagram => {
   });
 });
 
+const exampleWiringDiagrams = [
+  {
+    panelId: 'example-button', device: 'Кнопка + LED', description: 'Кнопка соединяет вход D2 с GND при нажатии, а светодиод на D13 переключается программно.', pins: [['D2', 'Контакт кнопки 1', 'yellow'], ['GND', 'Контакт кнопки 2', 'dark'], ['D13', 'Резистор 220 Ω → анод LED', 'red'], ['GND', 'Катод LED', 'dark']], note: 'Кнопка работает в режиме INPUT_PULLUP: отпущенная читается как HIGH, нажатая — как LOW. Внешний резистор не нужен.'
+  },
+  {
+    panelId: 'example-millis', device: 'Два светодиода', description: 'Каждый светодиод получает собственный выход и собственный резистор, а таймеры на millis() мигают ими независимо.', pins: [['D12', 'Резистор 220 Ω → анод LED 1', 'red'], ['D13', 'Резистор 220 Ω → анод LED 2', 'red'], ['GND', 'Катоды обоих LED', 'dark']], note: 'У каждого светодиода должен быть свой резистор. Один общий резистор на два светодиода использовать нельзя.'
+  },
+  {
+    panelId: 'example-rgb', device: 'RGB · общий катод', description: 'Три цветовых канала RGB-светодиода управляются отдельными ШИМ-выходами через отдельные резисторы.', pins: [['D9 ~', 'Резистор 220 Ω → R', 'red'], ['D10 ~', 'Резистор 220 Ω → G', 'green'], ['D11 ~', 'Резистор 220 Ω → B', 'blue'], ['GND', 'Общий катод', 'dark']], note: 'Схема показана для RGB с общим катодом — самая длинная ножка. Для модели с общим анодом подключение и логика управления отличаются.'
+  },
+  {
+    panelId: 'example-distance', device: 'HC-SR04 + LED', description: 'Датчик измеряет расстояние, а светодиоды на D2–D4 показывают зону: зелёный, жёлтый или красный.', pins: [['5V', 'VCC датчика', 'red'], ['D7', 'TRIG', 'yellow'], ['D8', 'ECHO', 'blue'], ['GND', 'GND датчика', 'dark'], ['D2–D4', 'LED через резисторы 220 Ω', 'red']], note: 'Каждый светодиод подключается через свой резистор, катоды — к GND. Для звукового сигнала можно добавить пьезодинамик на D9.'
+  },
+  {
+    panelId: 'example-reaction', device: 'Кнопка + LED', description: 'Светодиод на D13 подаёт сигнал, а кнопка на D2 фиксирует скорость вашей реакции.', pins: [['D2', 'Контакт кнопки 1', 'yellow'], ['GND', 'Контакт кнопки 2', 'dark'], ['D13', 'Резистор 220 Ω → анод LED', 'red'], ['GND', 'Катод LED', 'dark']], note: 'Кнопка работает в режиме INPUT_PULLUP: отпущенная читается как HIGH, нажатая — как LOW. Внешний резистор не нужен.'
+  }
+];
+
+exampleWiringDiagrams.forEach(diagram => {
+  const panel = document.getElementById(diagram.panelId);
+  const wiringBox = panel && panel.querySelector('.example-wiring');
+  if (!wiringBox) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'wiring-open example-wiring-open';
+  button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 12h10M12 7v10"/></svg> Схема подключения';
+  wiringBox.appendChild(button);
+  button.addEventListener('click', () => {
+    const tab = document.querySelector(`.example-tab[data-example="${panel.dataset.panel}"]`);
+    document.getElementById('wiring-title').textContent = tab ? tab.textContent.trim().replace(/^\d+\s*/, '') : 'Пример';
+    document.getElementById('wiring-description').textContent = diagram.description;
+    document.getElementById('wiring-note').textContent = diagram.note;
+    document.getElementById('wiring-diagram').innerHTML = renderWiringDiagram(diagram);
+    wiringModal.showModal();
+    document.body.classList.add('modal-open');
+  });
+});
+
 function closeWiringModal() {
   wiringModal.close();
   document.body.classList.remove('modal-open');

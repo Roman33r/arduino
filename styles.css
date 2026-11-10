@@ -557,6 +557,7 @@ pre { margin: 0; white-space: pre; }
 .example-wiring strong { display: block; margin-bottom: 5px; font-size: 11px; }
 .example-wiring p { margin: 0; font-size: 11px; }
 .example-wiring code, .example-explanation code { padding: 2px 4px; border-radius: 3px; background: #e6f0eb; color: var(--teal); }
+.example-wiring .example-wiring-open { max-width: 225px; margin-top: 12px; }
 .example-explanation { margin-top: 20px; }
 .example-playground { align-self: start; min-width: 0; padding: 23px; border: 1px solid #dce6e1; border-radius: 12px; background: #f4f7f3; text-align: center; }
 .playground-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; color: #728984; font-size: 9px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; }
