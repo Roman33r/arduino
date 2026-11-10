@@ -720,6 +720,33 @@ const wiringDiagrams = [
   }
 ];
 
+const lessonWiringDiagrams = [
+  {
+    lessonId: 'lesson-1', device: 'Компьютер', description: 'Первый урок не требует радиодеталей: USB-кабель соединяет плату с компьютером и одновременно питает её.', pins: [['USB', 'USB-порт компьютера', 'blue']], note: 'Больше ничего подключать не нужно. Отдельный блок питания на этом этапе не требуется.'
+  },
+  {
+    lessonId: 'lesson-2', device: 'Макетная плата + LED', description: 'Питание Uno выведено на боковые дорожки макетной платы, а светодиод подключён к D13 через резистор.', pins: [['5V', 'Красная дорожка +', 'red'], ['GND', 'Синяя дорожка −', 'dark'], ['D13', 'Резистор 220 Ω → анод LED', 'red'], ['GND', 'Катод LED', 'dark']], note: 'Дорожки питания на макетке работают как удобные «розетки»: от них короткими перемычками питаются все детали схемы. Следите, чтобы 5V и GND никогда не соединялись напрямую.'
+  },
+  {
+    lessonId: 'lesson-3', device: 'Компьютер', description: 'Для загрузки скетча плату подключают кабелем, в котором есть линии данных, а не только провода питания.', pins: [['USB-B', 'USB-порт компьютера', 'blue']], note: 'Если плата светится, но не видна в Arduino IDE, замените кабель: некоторые USB-кабели передают только питание.'
+  },
+  {
+    lessonId: 'lesson-4', device: 'Светодиод + резистор', description: 'Классическая первая схема: выход D13 управляет светодиодом, резистор 220 Ом ограничивает ток.', pins: [['D13', 'Резистор 220 Ω → анод (+)', 'red'], ['GND', 'Катод (−)', 'dark']], note: 'Длинная ножка светодиода — анод, она идёт к резистору и D13. Если перепутать полярность, светодиод просто не загорится. Перед сборкой отключите питание.'
+  },
+  {
+    lessonId: 'lesson-5', device: 'Кнопка + LED', description: 'Кнопка соединяет вход D2 с GND только во время нажатия, а светодиод на D13 показывает результат.', pins: [['D2', 'Контакт кнопки 1', 'yellow'], ['GND', 'Контакт кнопки 2', 'dark'], ['D13', 'Резистор 220 Ω → анод LED', 'red'], ['GND', 'Катод LED', 'dark']], note: 'В коде выбран INPUT_PULLUP: отпущенная кнопка читается как HIGH, нажатая — как LOW. Внешний резистор для кнопки не нужен.'
+  },
+  {
+    lessonId: 'lesson-6', device: 'Потенциометр + LED', description: 'Потенциометр на A0 задаёт яркость, а выход D9 со значком ~ плавно управляет светодиодом.', pins: [['5V', 'Крайний вывод 1', 'red'], ['A0', 'Средний вывод', 'yellow'], ['GND', 'Крайний вывод 2', 'dark'], ['D9 ~', 'Резистор 220 Ω → анод LED', 'red'], ['GND', 'Катод LED', 'dark']], note: 'Плавная яркость работает только на контактах со значком ~ (ШИМ). Обычный digitalWrite() умеет только включать и выключать.'
+  },
+  {
+    lessonId: 'lesson-7', device: 'Потенциометр + USB', description: 'Потенциометр подключён к A0, а измеренные значения уходят по USB-кабелю в Монитор порта на компьютере.', pins: [['5V', 'Крайний вывод 1', 'red'], ['A0', 'Средний вывод', 'yellow'], ['GND', 'Крайний вывод 2', 'dark'], ['USB', 'Монитор порта в Arduino IDE', 'blue']], note: 'Сообщения Serial.println() идут по тому же USB-кабелю, через который загружался скетч. Скорость в Мониторе порта должна совпадать со значением Serial.begin().'
+  },
+  {
+    lessonId: 'lesson-8', device: 'Фоторезистор + LED', description: 'Фоторезистор и резистор 10 кОм образуют делитель напряжения на A0, а выход D9 управляет яркостью ночника.', pins: [['5V', 'Фоторезистор → точка A0', 'red'], ['A0', 'Общая точка деталей', 'yellow'], ['GND', 'Резистор 10 кОм → точка A0', 'dark'], ['D9 ~', 'Резистор 220 Ω → анод LED', 'red'], ['GND', 'Катод LED', 'dark']], note: 'Порог срабатывания настройте по Монитору порта: запишите значения «светло» и «темно» и выберите число между ними. Перед изменением схемы отключайте питание.'
+  }
+];
+
 const wiringModal = document.getElementById('wiring-modal');
 const wiringColors = { red: '#df6855', dark: '#334b54', yellow: '#dfab48', blue: '#4e94bd', green: '#4eaa7e' };
 
@@ -752,6 +779,24 @@ componentCards.forEach((card, index) => {
   card.appendChild(button);
   button.addEventListener('click', () => {
     document.getElementById('wiring-title').textContent = card.querySelector('h3').textContent;
+    document.getElementById('wiring-description').textContent = diagram.description;
+    document.getElementById('wiring-note').textContent = diagram.note;
+    document.getElementById('wiring-diagram').innerHTML = renderWiringDiagram(diagram);
+    wiringModal.showModal();
+    document.body.classList.add('modal-open');
+  });
+});
+
+lessonWiringDiagrams.forEach(diagram => {
+  const lesson = document.getElementById(diagram.lessonId);
+  if (!lesson) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'wiring-open lesson-wiring-open';
+  button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 12h10M12 7v10"/></svg> Схема урока';
+  lesson.appendChild(button);
+  button.addEventListener('click', () => {
+    document.getElementById('wiring-title').textContent = lesson.querySelector('h3').textContent;
     document.getElementById('wiring-description').textContent = diagram.description;
     document.getElementById('wiring-note').textContent = diagram.note;
     document.getElementById('wiring-diagram').innerHTML = renderWiringDiagram(diagram);
